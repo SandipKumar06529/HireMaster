@@ -1,5 +1,4 @@
 # HireMaster
-# HireMaster
 
 ## Overview
 HireMaster is a freelancing platform designed to connect clients with freelancers. It provides a seamless experience for project posting, bidding, payments, and real-time notifications.
