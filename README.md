@@ -6,18 +6,16 @@ HireMaster is a freelancing platform designed to connect clients with freelancer
 ## Features
 - **User Authentication & Role Management**: Secure login system differentiating between clients and freelancers.
 - **Project Posting & Bidding**: Clients can post projects while freelancers can place bids.
-- **Payment Processing**: Secure transaction handling through an integrated payment gateway.
 - **Real-time Notifications**: Users receive updates on bids, payments, and project status.
 - **Rating & Review System**: Clients and freelancers can leave feedback on completed projects.
 - **Profile Management**: Users can maintain detailed profiles including skills, experience, and portfolio.
 
 ## Tech Stack
-- **Backend**: Node.js, Express.js
+- **Backend**: Node.js, Express.js, GraphQL
 - **Frontend**: React.js
 - **Database**: MongoDB
-- **Authentication**: JWT & OAuth (LinkedIn, GitHub APIs)
-- **Payments**: Stripe API
-- **Hosting & Deployment**: AWS / Firebase
+- **Authentication**: JWT 
+- **Hosting & Deployment**: AWS / Firebase (Optional)
 
 ## Database Schema
 - **Users**: Stores authentication details and roles.
@@ -25,7 +23,7 @@ HireMaster is a freelancing platform designed to connect clients with freelancer
 - **Clients**: Company details and project postings.
 - **Projects**: Project details, deadlines, and budgets.
 - **Bids**: Freelancer proposals and bid statuses.
-- **Payments**: Transaction details and statuses.
+- **Payments**: Payment status.
 - **Ratings**: Feedback and reviews.
 - **Notifications**: Real-time updates for bids and payments.
 
@@ -60,5 +58,5 @@ HireMaster is a freelancing platform designed to connect clients with freelancer
 - Optimize notification system for better user engagement.
 
 ## Contact
-For inquiries, reach out to [your-email@example.com](mailto:your-email@example.com) or open an issue on GitHub.
+For inquiries, reach out to [hinalsandip@gmail.com](mailto:hinalsandip@gmail.com) or open an issue on GitHub.
 
