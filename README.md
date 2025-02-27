@@ -51,11 +51,6 @@ HireMaster is a freelancing platform designed to connect clients with freelancer
 - Follow the coding standards and commit messages.
 - Submit a pull request for review.
 
-## Roadmap
-- Implement messaging between clients and freelancers.
-- Enhance search and filtering capabilities.
-- Develop analytics for freelancer ratings and project success rates.
-- Optimize notification system for better user engagement.
 
 ## Contact
 For inquiries, reach out to [hinalsandip@gmail.com](mailto:hinalsandip@gmail.com) or open an issue on GitHub.
