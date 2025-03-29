@@ -1,0 +1,120 @@
+.signin-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+  }
+  
+  .signin-left {
+    width: 50%;
+    padding: 4rem;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .signin-header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+  }
+  
+  .signin-header p {
+    color: #6b7280;
+  }
+  
+  .signin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 0.875rem;
+    color: #374151;
+    margin-bottom: 0.25rem;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    outline: none;
+  }
+  
+  .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+  }
+  
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .btn-primary {
+    background-color: #1d4ed8;
+    color: white;
+    padding: 0.5rem 0;
+    border-radius: 0.375rem;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-primary:hover {
+    background-color: #1e40af;
+  }
+  
+  .signup-text {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+  
+  .signup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .btn-secondary {
+    background-color: #1d4ed8;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.375rem;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #1e40af;
+  }
+  
+  .signin-right {
+    width: 50%;
+    padding: 4rem;
+    color: white;
+    background: linear-gradient(to bottom right, #4f46e5, #7c3aed);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .signin-right h2 {
+    font-size: 2.25rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+  
+  .signin-right p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
