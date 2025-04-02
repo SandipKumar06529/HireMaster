@@ -1,7 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; 
 import "./SignInPage.css";
 
 export default function SignInPage() {
+    const navigate = useNavigate();
+
+
   return (
     <div className="signin-container">
       <div className="signin-left">
@@ -35,8 +39,13 @@ export default function SignInPage() {
           </div>
 
           <div className="signup-buttons">
-            <button className="btn-secondary">Client</button>
-            <button className="btn-secondary">Freelancer</button>
+            <button 
+                type="button" 
+                className="btn-secondary"
+                onClick={() => navigate("/signup/client")}
+                >Client</button>
+
+            <button type="button" className="btn-secondary" onClick={()=> navigate("/freelancer-signup")}>Freelancer</button>
           </div>
         </form>
       </div>

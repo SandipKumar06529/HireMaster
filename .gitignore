@@ -1,2 +1,3 @@
 /HireMaster/backend/.env
 /HireMaster/backend/node_modules
+/HireMaster/package-lock.json
