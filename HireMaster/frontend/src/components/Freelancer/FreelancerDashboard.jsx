@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./FreelancerDashboard.css";
 
 export default function FreelancerDashboard() {
@@ -11,6 +11,31 @@ export default function FreelancerDashboard() {
     { title: "Movie Recommendation App", client: "John Patrick", bid: 14000, status: "Inactive" }
   ];
 
+
+  // log out logic
+  const navigate = useNavigate();
+  const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef(null);
+
+  const toggleMenu = () => setShowMenu(!showMenu);
+  const handleLogout = () => {
+    alert("Logging out...");
+    localStorage.removeItem('token');  // Clear token
+    navigate('/');               // Redirect
+    // logout logic
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+
   return (
     <div className="dashboard-container">
       <aside className="sidebar">
@@ -18,7 +43,7 @@ export default function FreelancerDashboard() {
         <nav className="sidebar-menu">
           <Link to="/freelancer-dashboard" className="menu-item active">Dashboard</Link>
           <Link to="/freelancer-projects" className="menu-item">Projects</Link>
-          <Link to="/freelancer-payments" className="menu-item">Payment</Link>
+          <Link to="/freelancer-payments" className="menu-item">Payments</Link>
           <Link to="/freelancer-profile" className="menu-item">Profile</Link>
         </nav>
       </aside>
@@ -28,7 +53,15 @@ export default function FreelancerDashboard() {
           <h2>Dashboard</h2>
           <div className="header-actions">
             <span className="notification">🔔<sup>2</sup></span>
-            <span className="avatar">🧑‍💻</span>
+            <div className="profile-wrapper" ref={menuRef}>
+              <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
+              {showMenu && (
+                <div className="dropdown-menu">
+                  <button onClick={() => navigate("/profile")}>My Profile</button>
+                  <button onClick={handleLogout}>Log Out</button>
+                </div>
+              )}
+            </div>
           </div>
         </header>
 

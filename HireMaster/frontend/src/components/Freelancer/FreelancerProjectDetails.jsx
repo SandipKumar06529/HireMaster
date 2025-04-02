@@ -1,9 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import "./FreelancerProjectDetails.css";
 import BidModal from "./BidModal";
 
 export default function FreelancerProjectDetails() {
+    const [showBidModal, setShowBidModal] = useState(false);
+
+    const handleOpenBid = () => setShowBidModal(true);
+    const handleCloseBid = () => setShowBidModal(false);
     
   return (
     <div className="dashboard-container">
@@ -12,7 +16,7 @@ export default function FreelancerProjectDetails() {
         <nav className="sidebar-menu">
           <Link to="/freelancer-dashboard" className="menu-item">Dashboard</Link>
           <Link to="/freelancer-projects" className="menu-item active">Projects</Link>
-          <Link to="/freelancer-payments" className="menu-item">Payment</Link>
+          <Link to="/freelancer-payments" className="menu-item">Payments</Link>
           <Link to="/freelancer-profile" className="menu-item">Profile</Link>
         </nav>
       </aside>
@@ -59,11 +63,15 @@ export default function FreelancerProjectDetails() {
           </div>
 
           <div className="project-actions">
-            <button className="btn-bid">Bid</button>
+            <button className="btn-bid" onClick={handleOpenBid}>Bid</button>
             <button className="btn-save">Save</button>
           </div>
         </div>
       </main>
+
+      {showBidModal && <BidModal onClose={handleCloseBid}/>}
+
+      
     </div>
   );
 }

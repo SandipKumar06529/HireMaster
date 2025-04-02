@@ -9,6 +9,7 @@ import ClientProjects from './components/client/projects/ClientProjects';
 import PostProject from './components/client/projects/PostProjects';
 import ProjectDetails from './components/client/projects/ProjectDetails';
 import ProjectBids from './components/client/projects/ProjectBids';
+import ClientProfile from './components/client/profile/ClientProfile';
 
 import FreelancerSignupStep1 from './components/Freelancer/FreelancerSignUpStep1';
 import FreelancerSignupStep2 from './components/Freelancer/FreelancerSignUpStep2';
@@ -17,6 +18,7 @@ import FreelancerDashboard from './components/Freelancer/FreelancerDashboard';
 import FreelancerPayments from './components/Freelancer/FreelancerPayments';
 import FreelancerProjects from './components/Freelancer/FreelancerProjects';
 import FreelancerProjectDetails from './components/Freelancer/FreelancerProjectDetails';
+import FreelancerProfile from './components/Freelancer/FreelancerProfile';
 
 function App() {
   return (
@@ -28,9 +30,12 @@ function App() {
         <Route path="/dashboard" element={<ClientDashboard/>} />
         <Route path="/payments" element={<ClientPayments/>} />
         <Route path="/projects" element={<ClientProjects/>} />
+        <Route path="/profile" element={<ClientProfile/>} />
         <Route path="/projects/new" element={<PostProject/>} />
         <Route path="/projects/details" element={<ProjectDetails/>} />
         <Route path="/projects/details/bids" element={<ProjectBids/>} />
+        
+
 
         
         <Route path="/freelancer-signup" element={<FreelancerSignupStep1/>} />
@@ -40,6 +45,7 @@ function App() {
         <Route path="/freelancer-payments" element={<FreelancerPayments/>} />
         <Route path="/freelancer-projects" element={<FreelancerProjects/>} />
         <Route path="/freelancer-projects-details" element={<FreelancerProjectDetails/>} />
+        <Route path="/freelancer-profile" element={<FreelancerProfile/>} />
 
         
         

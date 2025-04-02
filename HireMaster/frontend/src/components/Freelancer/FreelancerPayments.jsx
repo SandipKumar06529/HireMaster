@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./FreelancerPayments.css";
 
 export default function FreelancerPayments() {
@@ -14,6 +14,30 @@ export default function FreelancerPayments() {
     { invoice: "0439104645404", client: "Guy Hawkins", date: "8/2/19", status: "Paid", amount: 500 }
   ];
 
+  // top navbar
+  // log out logic
+  const navigate = useNavigate();
+  const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef(null);
+
+  const toggleMenu = () => setShowMenu(!showMenu);
+  const handleLogout = () => {
+    alert("Logging out...");
+    localStorage.removeItem('token');  // Clear token
+    navigate('/');               // Redirect
+    // logout logic
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <div className="dashboard-container">
       <aside className="sidebar">
@@ -21,19 +45,38 @@ export default function FreelancerPayments() {
         <nav className="sidebar-menu">
           <Link to="/freelancer-dashboard" className="menu-item">Dashboard</Link>
           <Link to="/freelancer-projects" className="menu-item">Projects</Link>
-          <Link to="/freelancer-payments" className="menu-item active">Payment</Link>
+          <Link to="/freelancer-payments" className="menu-item active">Payments</Link>
           <Link to="/freelancer-profile" className="menu-item">Profile</Link>
         </nav>
       </aside>
 
       <main className="dashboard-main">
         <div className="freelancer-payments-container">
-          <header className="payments-header">
+          {/* <header className="payments-header">
             <h2>Payments</h2>
             <button className="btn-download">⬇️ Download PDF Report</button>
+          </header> */}
+
+          <header className="top-navbar">
+            <h2>Payments</h2>
+            <div className="header-actions">
+              <span className="notification">🔔<sup>2</sup></span>
+              <div className="profile-wrapper" ref={menuRef}>
+                <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
+                {showMenu && (
+                  <div className="dropdown-menu">
+                    <button onClick={() => navigate("/profile")}>My Profile</button>
+                    <button onClick={handleLogout}>Log Out</button>
+                  </div>
+                )}
+              </div>
+            </div>
           </header>
 
-          <h3 className="title">View and manage your payments here!</h3>
+          <header className="payments-header">
+            <h3 className="title" >View and manage your payments here!</h3>
+            <button className="btn-download">⬇️ Download PDF Report</button>
+          </header>
 
           <table className="payments-table">
             <thead>
