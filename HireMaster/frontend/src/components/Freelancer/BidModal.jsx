@@ -11,7 +11,6 @@ export default function BidModal({ onClose }) {
     onClose(); // Close modal
   };
 
-  
 
   return (
     <div className="modal-backdrop">

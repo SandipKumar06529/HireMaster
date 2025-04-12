@@ -92,6 +92,7 @@ export default function FreelancerDashboard() {
             <p className="stat-positive">+4.5%</p>
           </div>
         </section>
+        
 
         <section className="projects-section">
           <div className="projects-header">
