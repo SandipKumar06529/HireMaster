@@ -10,6 +10,8 @@ import PostProject from './components/client/projects/PostProjects';
 import ProjectDetails from './components/client/projects/ProjectDetails';
 import ProjectBids from './components/client/projects/ProjectBids';
 import ClientProfile from './components/client/profile/ClientProfile';
+import EditClientProfile from './components/client/editProfile/editClientProfile';
+
 
 import FreelancerSignupStep1 from './components/Freelancer/FreelancerSignUpStep1';
 import FreelancerSignupStep2 from './components/Freelancer/FreelancerSignUpStep2';
@@ -19,6 +21,7 @@ import FreelancerPayments from './components/Freelancer/FreelancerPayments';
 import FreelancerProjects from './components/Freelancer/FreelancerProjects';
 import FreelancerProjectDetails from './components/Freelancer/FreelancerProjectDetails';
 import FreelancerProfile from './components/Freelancer/FreelancerProfile';
+
 
 function App() {
   return (
@@ -34,6 +37,7 @@ function App() {
         <Route path="/projects/new" element={<PostProject/>} />
         <Route path="/projects/details" element={<ProjectDetails/>} />
         <Route path="/projects/details/bids" element={<ProjectBids/>} />
+        <Route path="/editProfile" element={<EditClientProfile/>} />
         
 
 

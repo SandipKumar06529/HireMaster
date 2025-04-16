@@ -1,9 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
 import "./ClientSignUpStepTwo.css";
 import { useNavigate } from "react-router-dom";
 
 export default function ClientSignUpStepTwo() {
   const navigate = useNavigate();
+
+  // State for inputs
+  const [companyName, setCompanyName] = useState("");
+  const [linkedin, setLinkedin] = useState("");
+  const [companyDomain, setCompanyDomain] = useState("");
+  const [aboutCompany, setAboutCompany] = useState("");
+
+  const handleFinish = async () => {
+    const userId = localStorage.getItem("userId");
+    const email = localStorage.getItem("email");
+
+    if (!userId || !email) {
+      alert("Missing user session. Please restart the signup process.");
+      navigate("/signup/client");
+      return;
+    }
+
+    const query = `
+      mutation {
+        createClient(clientInput: {
+          user_id: "${userId}",
+          company_name: "${companyName}",
+          linkedin: "${linkedin}",
+          company_domain: "${companyDomain}",
+          about_company: "${aboutCompany}",
+          email: "${email}"
+        }) {
+          id
+          company_name
+        }
+      }
+    `;
+
+    try {
+      const res = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query }),
+      });
+
+      const json = await res.json();
+      console.log("Client creation response:", json);
+
+      if (json?.data?.createClient?.id) {
+        alert("Client profile created successfully!");
+        navigate("/dashboard");
+      } else if (json?.errors?.length) {
+        alert("Failed: " + json.errors[0].message);
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    } catch (err) {
+      console.error("Client signup error:", err);
+      alert("An error occurred: " + err.message);
+    }
+  };
 
   return (
     <div className="signup-container">
@@ -22,19 +80,38 @@ export default function ClientSignUpStepTwo() {
           <p>Enter your details to sign up!</p>
 
           <form className="signup-form">
-            <input type="text" placeholder="Company Name" />
-            <input type="text" placeholder="LinkedIn Profile" />
-            <input type="text" placeholder="Company Domain" />
-            <textarea placeholder="About Company" rows={4}></textarea>
+            <input
+              type="text"
+              placeholder="Company Name"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="LinkedIn Profile"
+              value={linkedin}
+              onChange={(e) => setLinkedin(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Company Domain"
+              value={companyDomain}
+              onChange={(e) => setCompanyDomain(e.target.value)}
+            />
+            <textarea
+              placeholder="About Company"
+              rows={4}
+              value={aboutCompany}
+              onChange={(e) => setAboutCompany(e.target.value)}
+            ></textarea>
 
             <div className="form-row">
-              <button type="button" className="btn-primary" 
-              onClick={() => {
-                alert("Success! Redirecting to dashboard...");
-                navigate("/dashboard");
-
-              }}>Finish</button>
-              <button type="button" className="btn-primary" onClick={() => navigate("/signup/client")}>Back</button>
+              <button type="button" className="btn-primary" onClick={handleFinish}>
+                Finish
+              </button>
+              <button type="button" className="btn-primary" onClick={() => navigate("/signup/client")}>
+                Back
+              </button>
             </div>
           </form>
 
@@ -56,14 +133,14 @@ export default function ClientSignUpStepTwo() {
           <div className="circle">○</div>
           <div className="step-text">
             <strong>STEP 1</strong>
-            <p>Lorem ipsum dolor sit amet, consectetur.</p>
+            <p>Basic account credentials.</p>
           </div>
         </div>
         <div className="step">
           <div className="circle done">✔</div>
           <div className="step-text">
             <strong>STEP 2</strong>
-            <p>Lorem ipsum dolor sit amet, consectetur.</p>
+            <p>Company profile and info.</p>
           </div>
         </div>
       </div>
