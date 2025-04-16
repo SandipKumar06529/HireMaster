@@ -49,7 +49,12 @@ export default function PostProject() {
 
             <label>
               Project Description:
-              <textarea name="description" rows="5" value={form.description} onChange={handleChange} placeholder="Enter project description" required />
+              <textarea name="description" rows="5" value={form.description} onChange={handleChange}  required />
+            </label>
+
+            <label>
+              Key responsibilities:
+              <textarea name="description" rows="5" value={form.description} onChange={handleChange}  required />
             </label>
 
             <label>
@@ -58,8 +63,13 @@ export default function PostProject() {
             </label>
 
             <label>
-              Skills:
-              <input type="text" name="skills" value={form.skills} onChange={handleChange} required />
+              Required Skills:
+              <textarea type="text" name="skills" value={form.skills} onChange={handleChange} required />
+            </label>
+
+            <label>
+              Prefered Skills:
+              <textarea type="text" name="skills" value={form.skills} onChange={handleChange} required />
             </label>
 
             <label>
@@ -68,7 +78,7 @@ export default function PostProject() {
             </label>
 
             <div className="form-buttons">
-              <button type="submit" className="btn-submit">Submit</button>
+              <button type="submit" className="btn-submit" onClick={() => navigate("/projects")}>Submit</button>
               <button type="button" className="btn-cancel" onClick={() => navigate("/projects")}>Cancel</button>
             </div>
           </form>

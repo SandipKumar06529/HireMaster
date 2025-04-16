@@ -50,10 +50,10 @@ export default function SignInPage() {
       <div className="signin-left">
         <div className="signup-header">
           <div className="logo">HM</div>
-          <div className="login-link">
+          {/* <div className="login-link">
             <span>Already a User?</span>
             <button className="btn-outline" onClick={() => navigate("/")}>Log In</button>
-          </div>
+          </div> */}
         </div>
 
         <div className="form-wrapper">
