@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Client = require('../models/Client');
+const Project = require('../models/Project');
 
 const root = {
   createUser: async ({ userInput }) => {
@@ -72,6 +73,7 @@ const root = {
 
     const user = client.user_id;
     return {
+      id: client._id.toString(),
       ...client._doc,
       first_name: client.user_id.first_name,
       last_name: client.user_id.last_name,
@@ -106,8 +108,43 @@ const root = {
     };
   },
   
+  createProject: async ({ projectInput }) => {
+    const project = new Project({
+      client_id: projectInput.client_id,
+      title: projectInput.title,
+      description: projectInput.description,
+      responsibilities: projectInput.responsibilities,
+      requiredSkills: projectInput.requiredSkills,
+      preferredSkills: projectInput.preferredSkills,
+      budget: projectInput.budget,
+      deadline: new Date(projectInput.deadline),
+    });
   
-  
+    const savedProject = await project.save();
+    return {
+      id: savedProject._id,
+      ...savedProject._doc
+    };
+  },
+
+  getProjectsByClientId: async ({ clientId }) => {
+    return await Project.find({ client_id: clientId }).sort({ createdAt: -1 });
+  },
+
+  deleteProject: async ({ projectId }) => {
+    try {
+      await Project.findByIdAndDelete(projectId);
+      return true;
+    } catch (err) {
+      console.error("Delete Error:", err);
+      throw new Error("Failed to delete project");
+    }
+  },
+
+  getProjectById: async ({ id }) => {
+    return await Project.findById(id);
+  },
+
   users: async () => await User.find(),
   clients: async () => await Client.find()
 };

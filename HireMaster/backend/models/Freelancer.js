@@ -3,8 +3,6 @@ const mongoose = require('mongoose');
 const FreelancerSchema = new mongoose.Schema(
   {
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    first_name: { type: String, required: true },
-    last_name: { type: String, required: true },
     university_name: String,
     degree: String,
     major_of_undergrad: String,
@@ -15,7 +13,7 @@ const FreelancerSchema = new mongoose.Schema(
     phone_number: String,
     linkedin: String,
     github: String,
-    experience_level: { type: String, enum: ['Beginner', 'Intermediate', 'Expert'] },
+    experience_level: String,
     profile_created: { type: Boolean, default: false },
   },
   { timestamps: true }

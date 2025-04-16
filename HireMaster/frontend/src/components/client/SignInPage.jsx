@@ -33,8 +33,31 @@ export default function SignInPage() {
       console.log("Login response:", json);
 
       if (json?.data?.loginUser?.token) {
+        const userId = json.data.loginUser.userId;
         localStorage.setItem("token", json.data.loginUser.token);
         localStorage.setItem("userId", json.data.loginUser.userId);
+        const clientQuery = `
+          query {
+            getClientByUserId(userId: "${userId}") {
+              id
+            }
+          }
+        `;
+
+        const clientRes = await fetch("http://localhost:4000/graphql", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: clientQuery }),
+        });
+
+        const clientJson = await clientRes.json();
+        if (clientJson?.data?.getClientByUserId?.id) {
+          localStorage.setItem("clientId", clientJson.data.getClientByUserId.id);
+        } else {
+          alert("Could not retrieve client profile.");
+          return;
+        }
+        
         navigate("/dashboard"); // redirect after login
       } else {
         alert("Login failed: " + (json.errors?.[0]?.message || "Unknown error"));

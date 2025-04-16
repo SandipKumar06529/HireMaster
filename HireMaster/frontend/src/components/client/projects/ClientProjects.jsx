@@ -1,24 +1,81 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./ClientProjects.css";
 
 export default function ClientProjects() {
-    const navigate = useNavigate();
-    const [showModal, setShowModal] = useState(false);
-    const [projectToDelete, setProjectToDelete] = useState(null); 
-    
-    const handleDeleteClick = (projectName) => {
-      setProjectToDelete(projectName);
-      setShowModal(true);
+  const navigate = useNavigate();
+  const clientId = localStorage.getItem("clientId");
+
+  const [projects, setProjects] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState(null);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const query = `
+        query {
+          getProjectsByClientId(clientId: "${clientId}") {
+            id
+            title
+            description
+            responsibilities
+            budget
+            deadline
+            createdAt
+          }
+        }
+      `;
+
+      const res = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+
+      const json = await res.json();
+      if (json?.data?.getProjectsByClientId) {
+        setProjects(json.data.getProjectsByClientId);
+      }
     };
+
+    if (clientId) fetchProjects();
+  }, [clientId]);
+
+  const handleDeleteClick = (projectId) => {
+    setProjectToDelete(projectId);
+    setShowModal(true);
+  };
+
+  const confirmDelete = async () => {
+    const mutation = `
+      mutation {
+        deleteProject(projectId: "${projectToDelete}")
+      }
+    `;
   
-    const confirmDelete = () => {
-      console.log(`Deleting: ${projectToDelete}`);
-      // TODO: Add backend delete logic here
-      setShowModal(false);
-      setProjectToDelete(null);
-    };    
+    try {
+      const res = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: mutation }),
+      });
+  
+      const json = await res.json();
+      if (json.data?.deleteProject) {
+        setProjects(projects.filter((p) => p.id !== projectToDelete));
+        alert("Project deleted successfully!");
+      } else {
+        alert("Failed to delete project.");
+      }
+    } catch (err) {
+      console.error("Error deleting project:", err);
+      alert("Something went wrong.");
+    }
+  
+    setShowModal(false);
+    setProjectToDelete(null);
+  };
+  
 
   return (
     <div className="dashboard-container">
@@ -35,54 +92,52 @@ export default function ClientProjects() {
       <main className="dashboard-main">
         <header className="dashboard-header">
           <h2>Projects</h2>
-          <button className="btn-post" onClick={() => navigate("/projects/new")} >Post Project</button>
+          <button className="btn-post" onClick={() => navigate("/projects/new")}>Post Project</button>
         </header>
 
         <section className="projects-section">
-          <h3>View, Post and manage your Projects here!</h3>
+          <h3>View, post, and manage your Projects here!</h3>
 
-          <div className="project-card">
-            <h4>Stock Market Tracking App</h4>
-            <div className="project-meta">
-              <span>💰 Budget : $11,000</span>
-              <span>📅 Posted : 3/5/2025</span>
-            </div>
-            <p>
-              We are looking for a highly skilled Mobile App Developer to build a Stock Market Tracking App that provides real-time stock data, interactive charts, and investment insights. The ideal candidate should have experience in financial applications, API integration, and a strong understanding of UI/UX best practices for trading and financial apps.
-            </p>
-            <div className="project-buttons">
-              <button className="btn-manage" onClick={() => navigate("/projects/details")}>Manage</button>
-              <button className="btn-delete-project" onClick={() => handleDeleteClick("Stock Market Tracking App")}>Delete</button>
-            </div>
-          </div>
+          {projects.length === 0 ? (
+            <p>No projects posted yet.</p>
+          ) : (
+            projects.map((project) => {
+              console.log("createdAt:", project.createdAt);
+              console.log("deadline:", project.deadline);
 
-          <div className="project-card">
-            <h4>Social Media Dashboard</h4>
-            <div className="project-meta">
-              <span>💰 Budget : $18,000</span>
-              <span>📅 Posted : 3/11/2025</span>
-            </div>
-            <p>
-              We are seeking a talented Full Stack Developer to build a Social Media Dashboard that allows users to manage multiple social media accounts, schedule posts, track engagement metrics, and analyze performance from a single platform. The ideal candidate should have experience in API integrations, real-time data updates, and data visualization to create an intuitive and efficient dashboard.
-            </p>
-            <div className="project-buttons">
-              <button className="btn-manage" onClick={() => navigate("/projects/details")}>Manage</button>
-              <button className="btn-delete-project" onClick={() => handleDeleteClick("Social Media Dashboard")}>Delete</button>
-            </div>
-            
-          </div>
+              return (
+                <div className="project-card" key={project.id}>
+                  <h4>{project.title}</h4>
+                  <div className="project-meta">
+                    <span>💰 Budget: ${project.budget}</span>
+                    <span>
+                      📅 Posted: {project.createdAt ? new Date(Number(project.createdAt)).toLocaleDateString("en-US") : "N/A"}
+                    </span>
+                    <span>
+                      🕒 Deadline: {project.deadline ? new Date(Number(project.deadline)).toLocaleDateString("en-US") : "N/A"}
+                    </span>
+                  </div>
+                  <p>{project.description}</p>
+                  <div className="project-buttons">
+                    <button className="btn-manage" onClick={() => navigate(`/projects/${project.id}`)}>Manage</button>
+                    <button className="btn-delete-project" onClick={() => handleDeleteClick(project.id)}>Delete</button>
+                  </div>
+                </div>
+              );
+            })
+          )}
         </section>
 
         <footer className="dashboard-footer">
           <span>HM</span>
           <p>© 2025 All Rights Reserved to HireMaster | Version 0.1</p>
         </footer>
-        {/* Delete Confirmation Modal */}
+
         {showModal && (
           <div className="modal-overlay">
             <div className="modal-box">
               <h3>Do you want to delete this project?</h3>
-              <p><strong>{projectToDelete}</strong></p>
+              <p><strong>{projects.find(p => p.id === projectToDelete)?.title || "Project"}</strong></p>
               <div className="modal-buttons">
                 <button className="btn-cancel" onClick={() => setShowModal(false)}>Cancel</button>
                 <button className="btn-confirm" onClick={confirmDelete}>Confirm</button>

@@ -60,6 +60,32 @@ const schema = buildSchema(`
   phone_number: String
   profile_picture: String
 }
+  input ProjectInput {
+  client_id: ID!
+  title: String!
+  description: String
+  responsibilities: String
+  requiredSkills: String
+  preferredSkills: String
+  budget: Float
+  deadline: String
+}
+
+type Project {
+  id: ID!
+  client_id: ID!
+  title: String!
+  description: String
+  responsibilities: String
+  requiredSkills: String
+  preferredSkills: String
+  budget: Float
+  deadline: String
+  project_status: String
+  createdAt: String
+  updatedAt: String
+}
+
 
 
   type Mutation {
@@ -67,12 +93,16 @@ const schema = buildSchema(`
     createClient(clientInput: ClientInput): Client!
     loginUser(email: String!, password: String!): AuthData!
     updateClientProfile(input: UpdateClientInput!): Client!
+    createProject(projectInput: ProjectInput!): Project!
+    deleteProject(projectId: ID!): Boolean!
   }
 
   type Query {
     users: [User!]!
     clients: [Client!]!
     getClientByUserId(userId: ID!): Client
+    getProjectsByClientId(clientId: ID!): [Project!]!
+    getProjectById(id: ID!): Project
   }
 `);
 

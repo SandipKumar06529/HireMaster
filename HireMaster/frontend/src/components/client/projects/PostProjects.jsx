@@ -4,11 +4,15 @@ import "./PostProjects.css";
 
 export default function PostProject() {
   const navigate = useNavigate();
+  const clientId = localStorage.getItem("clientId");
+
   const [form, setForm] = useState({
     title: "",
     description: "",
+    responsibilities: "",
+    requiredSkills: "",
+    preferredSkills: "",
     budget: "",
-    skills: "",
     deadline: ""
   });
 
@@ -16,10 +20,52 @@ export default function PostProject() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Project Submitted:", form);
-    navigate("/projects");
+
+    if (!clientId) {
+      alert("Client not identified. Please log in again.");
+      return;
+    }
+
+    const mutation = `
+      mutation {
+        createProject(projectInput: {
+          client_id: "${clientId}",
+          title: "${form.title}",
+          description: """${form.description}""",
+          responsibilities: """${form.responsibilities}""",
+          requiredSkills: """${form.requiredSkills}""",
+          preferredSkills: """${form.preferredSkills}""",
+          budget: ${parseFloat(form.budget)},
+          deadline: "${form.deadline}",
+        }) {
+          id
+          title
+        }
+      }
+    `;
+
+    try {
+      const res = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: mutation }),
+      });
+
+      const json = await res.json();
+      console.log("GraphQL response:", json);
+
+      if (json.data?.createProject) {
+        alert("Project posted successfully!");
+        navigate("/projects");
+      } else {
+        alert("Failed to post project.");
+      }
+    } catch (err) {
+      console.error("Error submitting project:", err);
+      alert("Something went wrong.");
+    }
   };
 
   return (
@@ -49,27 +95,27 @@ export default function PostProject() {
 
             <label>
               Project Description:
-              <textarea name="description" rows="5" value={form.description} onChange={handleChange}  required />
+              <textarea name="description" rows="3" value={form.description} onChange={handleChange} required />
             </label>
 
             <label>
-              Key responsibilities:
-              <textarea name="description" rows="5" value={form.description} onChange={handleChange}  required />
+              Key Responsibilities:
+              <textarea name="responsibilities" rows="3" value={form.responsibilities} onChange={handleChange} required />
             </label>
 
             <label>
               Budget:
-              <input type="text" name="budget" value={form.budget} onChange={handleChange} required />
+              <input type="number" name="budget" value={form.budget} onChange={handleChange} required />
             </label>
 
             <label>
               Required Skills:
-              <textarea type="text" name="skills" value={form.skills} onChange={handleChange} required />
+              <textarea name="requiredSkills" rows="2" value={form.requiredSkills} onChange={handleChange} required />
             </label>
 
             <label>
-              Prefered Skills:
-              <textarea type="text" name="skills" value={form.skills} onChange={handleChange} required />
+              Preferred Skills:
+              <textarea name="preferredSkills" rows="2" value={form.preferredSkills} onChange={handleChange} required />
             </label>
 
             <label>
@@ -78,7 +124,7 @@ export default function PostProject() {
             </label>
 
             <div className="form-buttons">
-              <button type="submit" className="btn-submit" onClick={() => navigate("/projects")}>Submit</button>
+              <button type="submit" className="btn-submit">Submit</button>
               <button type="button" className="btn-cancel" onClick={() => navigate("/projects")}>Cancel</button>
             </div>
           </form>
