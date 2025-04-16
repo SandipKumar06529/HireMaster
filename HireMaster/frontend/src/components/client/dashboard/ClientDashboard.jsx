@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./ClientDashboard.css";
+import { assets } from "../../../assets/assets";
 
 
 export default function ClientDashboard() {
@@ -59,8 +60,15 @@ export default function ClientDashboard() {
         </header>
 
         <section className="welcome-section">
-          <h1>Welcome To Hire Master</h1>
-          <h2>John Doe</h2>
+          <img src={assets.Background_dashboard} alt="background" className="background-img" />
+
+          <div className="welcome-content">
+            <div className="text-content">
+              <h1>Welcome To Hire Master</h1>
+              <h2>John Doe</h2>
+            </div>
+            <img src={assets.dashboard_image} alt="illustration" className="foreground-img" />
+          </div>
         </section>
 
         <section className="stats-section">
@@ -89,51 +97,51 @@ export default function ClientDashboard() {
         <section className="posts-section">
           <div className="posts-header">
             <h3>Recent Posts</h3>
-            <div className="filters">
+            {/* <div className="filters">
               <button>Monthly</button>
               <button>Weekly</button>
               <button className="active">Today</button>
-            </div>
+            </div> */}
           </div>
 
           <table className="posts-table">
             <thead>
               <tr>
                 <th>Project Title</th>
-                <th>Openings</th>
-                <th>Applications</th>
+                <th>Freelancer</th>
+                <th>Bid Amount</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>UI UX Designer</td>
-                <td>135</td>
-                <td>135</td>
+                <td>Alice Johnson</td>
+                <td>$3,500</td>
                 <td><span className="status active">Active</span></td>
               </tr>
               <tr>
                 <td>Full Stack Dev</td>
-                <td>100</td>
-                <td>100</td>
+                <td>Brian Lee</td>
+                <td>$4,000</td>
                 <td><span className="status inactive">Inactive</span></td>
               </tr>
               <tr>
                 <td>DevOps</td>
-                <td>100</td>
-                <td>05</td>
+                <td>Catherine Singh</td>
+                <td>$3,800</td>
                 <td><span className="status active">Active</span></td>
               </tr>
               <tr>
                 <td>Android Dev</td>
-                <td>100</td>
-                <td>45</td>
+                <td>Elias Carter</td>
+                <td>$4,500</td>
                 <td><span className="status active">Active</span></td>
               </tr>
               <tr>
                 <td>IOS Developer</td>
-                <td>100</td>
-                <td>96</td>
+                <td>Rowan Preston</td>
+                <td>$4,000</td>
                 <td><span className="status inactive">Inactive</span></td>
               </tr>
             </tbody>

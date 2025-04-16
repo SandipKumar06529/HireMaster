@@ -99,9 +99,15 @@
     color: #374151;
     margin-bottom: 1rem;
   }
-  
-  .btn-manage,
-  .btn-read {
+
+  .project-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-top: 0rem;
+  }  
+
+  .btn-manage {
     background-color: #4f46e5;
     color: white;
     padding: 0.4rem 1.2rem;
@@ -110,6 +116,18 @@
     font-weight: 500;
     cursor: pointer;
   }
+
+  .btn-delete-project {
+    background-color: #f44336;
+    color: white;
+    padding: 0.4rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+  }  
+
+
   
   .dashboard-footer {
     text-align: center;
@@ -118,3 +136,51 @@
     margin-top: 2rem;
   }
   
+
+  /* pop delete */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .modal-box {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    width: 90%;
+    max-width: 350px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-buttons {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .btn-cancel {
+    background-color: #0e0d0d;
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-confirm {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
