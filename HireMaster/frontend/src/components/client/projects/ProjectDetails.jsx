@@ -30,6 +30,8 @@ export default function ProjectDetails() {
             <div className="project-meta">
               <span>💰 Budget: $11,000</span>
               <span>📅 Posted: 3/5/2025</span>
+              <span>🕒 Deadline: 4/30/2025</span>
+
             </div>
             <p>
               We are looking for a highly skilled Mobile App Developer to build a Stock Market Tracking App that provides real-time stock data, interactive charts, and investment insights.
