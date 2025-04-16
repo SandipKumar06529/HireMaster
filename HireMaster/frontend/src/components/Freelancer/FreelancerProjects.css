@@ -131,6 +131,12 @@
     margin-bottom: 1rem;
   }
   
+  .Freelnacer-project-buttons{
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-top: 0rem;
+  }
   .btn-read-more {
     background-color: #4f46e5;
     color: white;
@@ -147,3 +153,18 @@
     background-color: #4338ca;
   }
   
+  .btn-delete-Project{
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .btn-delete-Project:hover{
+    background-color: #c23e34;
+  }

@@ -64,7 +64,7 @@ export default function ClientDashboard() {
 
           <div className="welcome-content">
             <div className="text-content">
-              <h1>Welcome To Hire Master</h1>
+              <h1>Welcome To HireMaster</h1>
               <h2>John Doe</h2>
             </div>
             <img src={assets.dashboard_image} alt="illustration" className="foreground-img" />

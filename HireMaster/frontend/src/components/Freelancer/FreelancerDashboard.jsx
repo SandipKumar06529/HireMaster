@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./FreelancerDashboard.css";
+import { assets } from "../../assets/assets";
 
 export default function FreelancerDashboard() {
   const projects = [
@@ -65,10 +66,21 @@ export default function FreelancerDashboard() {
           </div>
         </header>
 
-        <section className="welcome-section">
+        {/* <section className="welcome-section">
           <h1>Welcome To Hire Master</h1>
           <h2>Amy Wong</h2>
-        </section>
+        </section> */}
+        <section className="welcome-section">
+                  <img src={assets.Background_dashboard} alt="background" className="background-img" />
+        
+                  <div className="welcome-content">
+                    <div className="text-content">
+                      <h1>Welcome To HireMaster</h1>
+                      <h2>Amy Wong</h2>
+                    </div>
+                    <img src={assets.dashboard_image} alt="illustration" className="foreground-img" />
+                  </div>
+                </section>
 
         <section className="stats-section">
           <div className="stat-card">
@@ -97,11 +109,11 @@ export default function FreelancerDashboard() {
         <section className="projects-section">
           <div className="projects-header">
             <h3>My Projects</h3>
-            <div className="filters">
+            {/* <div className="filters">
               <button>Monthly</button>
               <button>Weekly</button>
               <button className="active">Today</button>
-            </div>
+            </div> */}
           </div>
 
           <table className="projects-table">

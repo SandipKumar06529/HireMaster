@@ -8,6 +8,7 @@ export default function FreelancerProjects() {
       title: "Stock Market Tracking App",
       budget: "$11,000",
       date: "3/5/2025",
+      deadline: "3/15/2025",
       description:
         "We are looking for a highly skilled Mobile App Developer to build a Stock Market Tracking App that provides real-time stock data, interactive charts, and investment insights. The ideal candidate should have experience in financial applications, API integration, and a strong understanding of UI/UX best practices for trading and financial apps."
     },
@@ -15,6 +16,7 @@ export default function FreelancerProjects() {
       title: "Social Media Dashboard",
       budget: "$18,000",
       date: "3/11/2025",
+      deadline: "3/18/2025",
       description:
         "We are seeking a talented Full Stack Developer to build a Social Media Dashboard that allows users to manage multiple social media accounts, schedule posts, track engagement metrics, and analyze performance from a single platform. The ideal candidate should have experience in API integrations, real-time data updates, and data visualization to create an intuitive and efficient dashboard."
     },
@@ -22,35 +24,55 @@ export default function FreelancerProjects() {
       title: "Real Estate Listing Website",
       budget: "$8,000",
       date: "3/15/2025",
+      deadline: "3/30/2025",
       description:
         "We are looking for a skilled Full Stack Developer and UI/UX Designer to develop a modern and feature-rich Real Estate Listing Website where users can search, list, and explore properties effortlessly. The ideal candidate should have experience in building responsive web applications, integrating property APIs, optimizing search functionality, and ensuring a seamless user experience."
     }
   ];
- 
+
 
   // top navbar
-    // log out logic
-    const navigate = useNavigate();
-    const [showMenu, setShowMenu] = useState(false);
-    const menuRef = useRef(null);
-  
-    const toggleMenu = () => setShowMenu(!showMenu);
-    const handleLogout = () => {
-      alert("Logging out...");
-      localStorage.removeItem('token');  // Clear token
-      navigate('/');               // Redirect
-      // logout logic
+  // log out logic
+  const navigate = useNavigate();
+  const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef(null);
+
+  const toggleMenu = () => setShowMenu(!showMenu);
+  const handleLogout = () => {
+    alert("Logging out...");
+    localStorage.removeItem('token');  // Clear token
+    navigate('/');               // Redirect
+    // logout logic
+  };
+
+  //delete project pop up
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  const handleOpenDialog = (projectName) => {
+    setSelectedProject(projectName);
+    setIsDialogOpen(true);
+  };
+
+  const handleConfirmDeletion = () => {
+    console.log(`Deleting: ${selectedProject}`);
+    // TODO: Add backend delete logic here
+    setIsDialogOpen(false);
+    setSelectedProject(null);
+  };
+
+
+
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setShowMenu(false);
+      }
     };
-  
-    useEffect(() => {
-      const handleClickOutside = (e) => {
-        if (menuRef.current && !menuRef.current.contains(e.target)) {
-          setShowMenu(false);
-        }
-      };
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="dashboard-container">
@@ -92,14 +114,38 @@ export default function FreelancerProjects() {
             <div className="project-card" key={index}>
               <h2 className="project-title">{project.title}</h2>
               <p className="project-meta">
-                <span>💼 Budget : {project.budget}</span>
+                <span>💰 Budget : {project.budget}</span>
                 <span>📅 Posted : {project.date}</span>
+                <span>🕒 Deadline: {project.deadline}</span>
               </p>
               <p className="project-description">{project.description}</p>
-              <button className="btn-read-more" onClick={()=> navigate("/freelancer-projects-details")}>Read more</button>
+              <div className="Freelnacer-project-buttons">
+                <button className="btn-read-more" onClick={() => navigate("/freelancer-projects-details")}>Read more</button>
+                <button className="btn-delete-Project" onClick={() => handleOpenDialog("Social Media Dashboard")}>Delete</button>
+              </div>
             </div>
           ))}
         </div>
+
+        <footer className="dashboard-footer">
+          <span>HM</span>
+          <p>© 2025 All Rights Reserved to HireMaster | Version 0.1</p>
+        </footer>
+        {/* Delete Confirmation Modal */}
+        {isDialogOpen && (
+          <div className="modal-overlay">
+            <div className="modal-box">
+              <h3>Do you want to delete this project?</h3>
+              <p><strong>{selectedProject}</strong></p>
+              <div className="modal-buttons">
+                <button className="btn-cancel" onClick={() => setIsDialogOpen(false)}>Cancel</button>
+                <button className="btn-confirm" onClick={handleConfirmDeletion}>Confirm</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+
       </main>
     </div>
   );
