@@ -21,7 +21,7 @@ import FreelancerPayments from './components/Freelancer/FreelancerPayments';
 import FreelancerProjects from './components/Freelancer/FreelancerProjects';
 import FreelancerProjectDetails from './components/Freelancer/FreelancerProjectDetails';
 import FreelancerProfile from './components/Freelancer/FreelancerProfile';
-
+import EditFreelancerProfile from './components/Freelancer/editfreelancerProfile';
 
 function App() {
   return (
@@ -40,18 +40,20 @@ function App() {
         <Route path="/editProfile" element={<EditClientProfile/>} />
         <Route path="/projects/:projectId" element={<ProjectDetails />} />
 
-        
+  
 
-
-        
+  
         <Route path="/freelancer-signup" element={<FreelancerSignupStep1/>} />
         <Route path="/freelancer-signup-step2" element={<FreelancerSignupStep2/>} />
         <Route path="/freelancer-signup-step3" element={<FreelancerSignupStep3/>} />
         <Route path="/freelancer-dashboard" element={<FreelancerDashboard/>} />
         <Route path="/freelancer-payments" element={<FreelancerPayments/>} />
         <Route path="/freelancer-projects" element={<FreelancerProjects/>} />
-        <Route path="/freelancer-projects-details" element={<FreelancerProjectDetails/>} />
+        {/* <Route path="/freelancer-projects-details" element={<FreelancerProjectDetails/>} /> */}
+        <Route path="/freelancer-projects-details/:projectId" element={<FreelancerProjectDetails />} />
+
         <Route path="/freelancer-profile" element={<FreelancerProfile/>} />
+        <Route path="/freelancer-edit-Profile" element={<EditFreelancerProfile/>}/>
 
         
         

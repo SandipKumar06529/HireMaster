@@ -51,7 +51,7 @@ export default function ClientSignUpStepTwo() {
 
       if (json?.data?.createClient?.id) {
         alert("Client profile created successfully!");
-        navigate("/dashboard");
+        navigate("/");
       } else if (json?.errors?.length) {
         alert("Failed: " + json.errors[0].message);
       } else {

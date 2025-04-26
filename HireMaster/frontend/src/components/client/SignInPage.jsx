@@ -23,9 +23,7 @@ export default function SignInPage() {
     try {
       const res = await fetch("http://localhost:4000/graphql", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query }),
       });
 
@@ -34,8 +32,12 @@ export default function SignInPage() {
 
       if (json?.data?.loginUser?.token) {
         const userId = json.data.loginUser.userId;
-        localStorage.setItem("token", json.data.loginUser.token);
-        localStorage.setItem("userId", json.data.loginUser.userId);
+        const token = json.data.loginUser.token;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("userId", userId);
+
+        // Check if user is a Client
         const clientQuery = `
           query {
             getClientByUserId(userId: "${userId}") {
@@ -51,14 +53,37 @@ export default function SignInPage() {
         });
 
         const clientJson = await clientRes.json();
+
         if (clientJson?.data?.getClientByUserId?.id) {
           localStorage.setItem("clientId", clientJson.data.getClientByUserId.id);
-        } else {
-          alert("Could not retrieve client profile.");
+          navigate("/dashboard");
           return;
         }
-        
-        navigate("/dashboard"); // redirect after login
+
+        // If not a client, check if user is a Freelancer
+        const freelancerQuery = `
+          query {
+            getFreelancerByUserId(userId: "${userId}") {
+              id
+            }
+          }
+        `;
+
+        const freelancerRes = await fetch("http://localhost:4000/graphql", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: freelancerQuery }),
+        });
+
+        const freelancerJson = await freelancerRes.json();
+
+        if (freelancerJson?.data?.getFreelancerByUserId?.id) {
+          localStorage.setItem("freelancerId", freelancerJson.data.getFreelancerByUserId.id);
+          navigate("/freelancer-dashboard");
+          return;
+        }
+
+        alert("User type not recognized. Are you registered as a client or freelancer?");
       } else {
         alert("Login failed: " + (json.errors?.[0]?.message || "Unknown error"));
       }
@@ -73,22 +98,18 @@ export default function SignInPage() {
       <div className="signin-left">
         <div className="signup-header">
           <div className="logo">HM</div>
-          {/* <div className="login-link">
-            <span>Already a User?</span>
-            <button className="btn-outline" onClick={() => navigate("/")}>Log In</button>
-          </div> */}
         </div>
 
         <div className="form-wrapper">
           <h1>Sign In</h1>
-          <p>Enter your email and password to Sign in!</p> 
+          <p>Enter your email and password to Sign in!</p>
 
           <form className="signin-form" onSubmit={handleLogin}>
             <div className="form-group">
               <label>Email*</label>
               <input
                 type="email"
-                placeholder="mail@simmmpale.com"
+                placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -110,7 +131,7 @@ export default function SignInPage() {
               <label className="checkbox">
                 <input type="checkbox" /> Keep me logged in
               </label>
-              <a href="#">Forget password?</a>
+              <a href="#">Forgot password?</a>
             </div>
 
             <button type="submit" className="btn-primary">Login</button>
@@ -126,7 +147,11 @@ export default function SignInPage() {
                 onClick={() => navigate("/signup/client")}
               >Client</button>
 
-              <button type="button" className="btn-secondary" onClick={() => navigate("/freelancer-signup")}>Freelancer</button>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => navigate("/freelancer-signup")}
+              >Freelancer</button>
             </div>
           </form>
         </div>

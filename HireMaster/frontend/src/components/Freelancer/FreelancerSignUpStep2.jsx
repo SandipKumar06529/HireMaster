@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./FreelancerSignUpStep2.css";
 
@@ -12,6 +12,13 @@ export default function FreelancerSignupStep2() {
     skills: ""
   });
 
+  useEffect(() => {
+    const step2Data = localStorage.getItem("freelancerSignupStep2");
+    if (step2Data) {
+      setFormData(JSON.parse(step2Data));
+    }
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -20,6 +27,11 @@ export default function FreelancerSignupStep2() {
   const handleNext = (e) => {
     e.preventDefault();
     console.log("Freelancer Step 2 Data:", formData);
+
+    // Save Step 2 data temporarily
+    localStorage.setItem("freelancerSignupStep2", JSON.stringify(formData));
+
+    // Move to Step 3
     navigate("/freelancer-signup-step3");
   };
 
@@ -32,7 +44,7 @@ export default function FreelancerSignupStep2() {
       <div className="signup-left">
         <div className="top-nav">
           <span>Already a Freelancer?</span>
-          <button className="btn-login" onClick={()=> navigate("/")}>Log In</button>
+          <button className="btn-login" onClick={() => navigate("/")}>Log In</button>
         </div>
 
         <h1>Sign Up As a Freelancer</h1>
@@ -100,9 +112,9 @@ export default function FreelancerSignupStep2() {
       <div className="signup-right">
         <h2>Steps to Register as Freelancer</h2>
         <ul className="steps">
-          <li className="checked">STEP 1<br/><span>Lorem ipsum dolor sit amet, consectetur.</span></li>
-          <li className="active">STEP 2<br/><span>Lorem ipsum dolor sit amet, consectetur.</span></li>
-          <li>FINAL STEP<br/><span>Lorem ipsum dolor sit amet, consectetur.</span></li>
+          <li className="checked">STEP 1<br /><span>Lorem ipsum dolor sit amet, consectetur.</span></li>
+          <li className="active">STEP 2<br /><span>Lorem ipsum dolor sit amet, consectetur.</span></li>
+          <li>FINAL STEP<br /><span>Lorem ipsum dolor sit amet, consectetur.</span></li>
         </ul>
       </div>
     </div>

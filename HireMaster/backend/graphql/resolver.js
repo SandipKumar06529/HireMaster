@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Client = require('../models/Client');
 const Project = require('../models/Project');
+const Freelancer = require('../models/Freelancer');
+
 
 const root = {
   createUser: async ({ userInput }) => {
@@ -15,6 +17,7 @@ const root = {
       last_name: userInput.last_name,
       email: userInput.email,
       password: hashedPassword,
+      gender: userInput.gender,
       account_type: userInput.account_type
     });
 
@@ -144,6 +147,101 @@ const root = {
   getProjectById: async ({ id }) => {
     return await Project.findById(id);
   },
+  registerFreelancer: async ({ userInput, freelancerInput }) => {
+    // 1. Check if email exists
+    const existingUser = await User.findOne({ email: userInput.email });
+    if (existingUser) throw new Error('User already exists.');
+  
+    // 2. Hash password
+    const hashedPassword = await bcrypt.hash(userInput.password, 12);
+  
+    // 3. Create User
+    const newUser = new User({
+      first_name: userInput.first_name,
+      last_name: userInput.last_name,
+      gender: userInput.gender,
+      email: userInput.email,
+      password: hashedPassword,
+      account_type: "Freelancer",
+    });
+  
+    const savedUser = await newUser.save();
+  
+    // 4. Create Freelancer linked to user
+    const newFreelancer = new Freelancer({
+      user_id: savedUser._id,
+      university_name: freelancerInput.university_name,
+      degree: freelancerInput.degree,
+      major_of_undergrad: freelancerInput.major_of_undergrad,
+      major_of_grad: freelancerInput.major_of_grad,
+      skills: freelancerInput.skills,
+      resume: freelancerInput.resume,
+      email: userInput.email,
+      phone_number: freelancerInput.phone_number,
+      linkedin: freelancerInput.linkedin,
+      github: freelancerInput.github,
+      experience_level: freelancerInput.experience_level,
+      profile_created: true
+    });
+  
+    await newFreelancer.save();
+  
+    // 5. Return AuthData (optional: for future auto-login after signup)
+    const token = jwt.sign(
+      { userId: savedUser.id, email: savedUser.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+  
+    return { userId: savedUser.id, token: token, tokenExpiration: 1 };
+  },
+  getFreelancerByUserId: async ({ userId }) => {
+    const freelancer = await Freelancer.findOne({ user_id: userId }).populate("user_id");
+  
+    if (!freelancer) {
+      throw new Error("Freelancer not found");
+    }
+  
+    return {
+      id: freelancer._id.toString(),
+      ...freelancer._doc,
+      first_name: freelancer.user_id.first_name,
+      last_name: freelancer.user_id.last_name,
+    };
+  },
+  updateFreelancerProfile: async ({ input }) => {
+    const { user_id, first_name, last_name, password, ...freelancerFields } = input;
+  
+    // Update User
+    const updateUser = { first_name, last_name };
+    if (password && password.trim() !== "") {
+      const hashed = await bcrypt.hash(password, 12);
+      updateUser.password = hashed;
+    }
+  
+    await User.findByIdAndUpdate(user_id, updateUser);
+  
+    // Update Freelancer
+    const updatedFreelancer = await Freelancer.findOneAndUpdate(
+      { user_id },
+      { ...freelancerFields },
+      { new: true }
+    ).populate('user_id');
+  
+    return {
+      id: updatedFreelancer._id.toString(),
+      ...updatedFreelancer._doc,
+      user_id: updatedFreelancer.user_id._id.toString(),
+      first_name: updatedFreelancer.user_id.first_name,
+      last_name: updatedFreelancer.user_id.last_name,
+    };
+  },
+  getAllProjects: async () => {
+    return await Project.find({ project_status: "Active" }).sort({ createdAt: -1 });
+  },
+  
+  
+  
 
   users: async () => await User.find(),
   clients: async () => await Client.find()

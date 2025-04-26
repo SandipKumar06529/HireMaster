@@ -20,7 +20,12 @@ export default function FreelancerSignupStep1() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Freelancer Step 1 Data:", formData);
-    navigate("/freelancer-signup-step-2");
+
+    // Save Step 1 data temporarily in localStorage
+    localStorage.setItem("freelancerSignupStep1", JSON.stringify(formData));
+
+    // Navigate to Step 2
+    navigate("/freelancer-signup-step2");
   };
 
   return (
@@ -28,8 +33,9 @@ export default function FreelancerSignupStep1() {
       <div className="signup-left">
         <div className="top-nav">
           <span>Already a Freelancer?</span>
-          <button className="btn-login" onClick={()=> navigate("/")}>Log In</button>
+          <button className="btn-login" onClick={() => navigate("/")}>Log In</button>
         </div>
+
         <h1>Sign Up As a Freelancer</h1>
         <p>Enter your details to sign up!</p>
 
@@ -98,7 +104,9 @@ export default function FreelancerSignupStep1() {
           <div className="password-strength-bar"></div>
           <p className="password-strength-label">Password Strength</p>
 
-          <button type="button" className="btn-primary" onClick={()=> navigate("/freelancer-signup-step2")}>Next</button>
+          <button type="submit" className="btn-primary">
+            Next
+          </button>
 
           <p className="terms-text">
             By Creating an Account, it means you agree to our <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>

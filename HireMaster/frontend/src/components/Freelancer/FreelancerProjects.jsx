@@ -3,51 +3,19 @@ import { Link, useNavigate } from "react-router-dom";
 import "./FreelancerProjects.css";
 
 export default function FreelancerProjects() {
-  const projects = [
-    {
-      title: "Stock Market Tracking App",
-      budget: "$11,000",
-      date: "3/5/2025",
-      deadline: "3/15/2025",
-      description:
-        "We are looking for a highly skilled Mobile App Developer to build a Stock Market Tracking App that provides real-time stock data, interactive charts, and investment insights. The ideal candidate should have experience in financial applications, API integration, and a strong understanding of UI/UX best practices for trading and financial apps."
-    },
-    {
-      title: "Social Media Dashboard",
-      budget: "$18,000",
-      date: "3/11/2025",
-      deadline: "3/18/2025",
-      description:
-        "We are seeking a talented Full Stack Developer to build a Social Media Dashboard that allows users to manage multiple social media accounts, schedule posts, track engagement metrics, and analyze performance from a single platform. The ideal candidate should have experience in API integrations, real-time data updates, and data visualization to create an intuitive and efficient dashboard."
-    },
-    {
-      title: "Real Estate Listing Website",
-      budget: "$8,000",
-      date: "3/15/2025",
-      deadline: "3/30/2025",
-      description:
-        "We are looking for a skilled Full Stack Developer and UI/UX Designer to develop a modern and feature-rich Real Estate Listing Website where users can search, list, and explore properties effortlessly. The ideal candidate should have experience in building responsive web applications, integrating property APIs, optimizing search functionality, and ensuring a seamless user experience."
-    }
-  ];
-
-
-  // top navbar
-  // log out logic
   const navigate = useNavigate();
+  const [projects, setProjects] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   const toggleMenu = () => setShowMenu(!showMenu);
   const handleLogout = () => {
-    alert("Logging out...");
-    localStorage.removeItem('token');  // Clear token
-    navigate('/');               // Redirect
-    // logout logic
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    navigate("/");
   };
-
-  //delete project pop up
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null);
 
   const handleOpenDialog = (projectName) => {
     setSelectedProject(projectName);
@@ -61,15 +29,47 @@ export default function FreelancerProjects() {
     setSelectedProject(null);
   };
 
+  const fetchProjects = async () => {
+    const query = `
+      query {
+        getAllProjects {
+          id
+          title
+          budget
+          createdAt
+          deadline
+          description
+        }
+      }
+    `;
 
+    try {
+      const res = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
 
+      const json = await res.json();
+      if (json?.data?.getAllProjects) {
+        setProjects(json.data.getAllProjects);
+      } else {
+        console.error("Failed to fetch projects");
+      }
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    }
+  };
 
   useEffect(() => {
+    fetchProjects();
+
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setShowMenu(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -87,9 +87,6 @@ export default function FreelancerProjects() {
       </aside>
 
       <main className="dashboard-main">
-        {/* <header className="projects-header">
-          <h2>Projects</h2>
-        </header> */}
         <header className="top-navbar">
           <h2>Projects</h2>
           <div className="header-actions">
@@ -98,7 +95,7 @@ export default function FreelancerProjects() {
               <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
               {showMenu && (
                 <div className="dropdown-menu">
-                  <button onClick={() => navigate("/profile")}>My Profile</button>
+                  <button onClick={() => navigate("/freelancer-profile")}>My Profile</button>
                   <button onClick={handleLogout}>Log Out</button>
                 </div>
               )}
@@ -106,32 +103,51 @@ export default function FreelancerProjects() {
           </div>
         </header>
 
-
-        <h3 className="title">View, Bid and manage your Projects here!</h3>
+        <h3 className="title">View, Bid and Manage Your Projects Here!</h3>
 
         <div className="project-list">
-          {projects.map((project, index) => (
-            <div className="project-card" key={index}>
-              <h2 className="project-title">{project.title}</h2>
-              <p className="project-meta">
-                <span>💰 Budget : {project.budget}</span>
-                <span>📅 Posted : {project.date}</span>
-                <span>🕒 Deadline: {project.deadline}</span>
-              </p>
-              <p className="project-description">{project.description}</p>
-              <div className="Freelnacer-project-buttons">
-                <button className="btn-read-more" onClick={() => navigate("/freelancer-projects-details")}>Read more</button>
-                <button className="btn-delete-Project" onClick={() => handleOpenDialog("Social Media Dashboard")}>Delete</button>
+          {projects.length > 0 ? (
+            projects.map((project) => (
+              <div className="project-card" key={project.id}>
+                <h2 className="project-title">{project.title}</h2>
+                <p className="project-meta">
+                  <span>💰 Budget: ${project.budget}</span>
+                  <span>
+                    📅 Posted:{" "}
+                    {project.createdAt
+                      ? new Date(Number(project.createdAt)).toLocaleDateString("en-US")
+                      : "N/A"}
+                  </span>
+                  <span>
+                    🕒 Deadline:{" "}
+                    {project.deadline
+                      ? new Date(Number(project.deadline)).toLocaleDateString("en-US")
+                      : "N/A"}
+                  </span>
+                </p>
+                <p className="project-description">{project.description}</p>
+                <div className="Freelnacer-project-buttons">
+                  <button className="btn-read-more" onClick={() => navigate(`/freelancer-projects-details/${project.id}`)}>
+                    Read More
+                  </button>
+
+                  {/* Optional delete logic */}
+                  {/* <button className="btn-delete-Project" onClick={() => handleOpenDialog(project.title)}>
+                    Delete
+                  </button> */}
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p>No projects found.</p>
+          )}
         </div>
 
         <footer className="dashboard-footer">
           <span>HM</span>
           <p>© 2025 All Rights Reserved to HireMaster | Version 0.1</p>
         </footer>
-        {/* Delete Confirmation Modal */}
+
         {isDialogOpen && (
           <div className="modal-overlay">
             <div className="modal-box">
@@ -144,8 +160,6 @@ export default function FreelancerProjects() {
             </div>
           </div>
         )}
-
-
       </main>
     </div>
   );

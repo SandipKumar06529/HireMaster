@@ -23,6 +23,39 @@ const schema = buildSchema(`
     profile_picture: String
   }
 
+  input FreelancerInput {
+  university_name: String
+  degree: String
+  major_of_undergrad: String
+  major_of_grad: String
+  skills: [String]
+  resume: String
+  phone_number: String
+  linkedin: String
+  email: String 
+  github: String
+  experience_level: String
+}
+  type Freelancer {
+  id: ID!
+  user_id: ID!
+  first_name: String
+  last_name: String
+  university_name: String
+  degree: String
+  major_of_undergrad: String
+  major_of_grad: String
+  skills: [String]
+  resume: String
+  email: String
+  phone_number: String
+  linkedin: String
+  github: String
+  experience_level: String
+  profile_created: Boolean
+  profile_picture: String
+}
+
   type AuthData {
     userId: ID!
     token: String!
@@ -35,6 +68,7 @@ const schema = buildSchema(`
     account_type: String!
     first_name: String
     last_name: String
+    gender: String 
   }
 
   input ClientInput {
@@ -60,6 +94,24 @@ const schema = buildSchema(`
   phone_number: String
   profile_picture: String
 }
+
+input UpdateFreelancerInput {
+  user_id: ID!
+  first_name: String
+  last_name: String
+  password: String
+  university_name: String
+  degree: String
+  major_of_undergrad: String
+  major_of_grad: String
+  skills: [String]
+  phone_number: String
+  linkedin: String
+  github: String
+  experience_level: String
+  profile_picture: String
+}
+
   input ProjectInput {
   client_id: ID!
   title: String!
@@ -95,6 +147,8 @@ type Project {
     updateClientProfile(input: UpdateClientInput!): Client!
     createProject(projectInput: ProjectInput!): Project!
     deleteProject(projectId: ID!): Boolean!
+    registerFreelancer(userInput: UserInput!, freelancerInput: FreelancerInput!): AuthData!
+    updateFreelancerProfile(input: UpdateFreelancerInput!): Freelancer!
   }
 
   type Query {
@@ -103,6 +157,8 @@ type Project {
     getClientByUserId(userId: ID!): Client
     getProjectsByClientId(clientId: ID!): [Project!]!
     getProjectById(id: ID!): Project
+    getFreelancerByUserId(userId: ID!): Freelancer
+    getAllProjects: [Project!]!
   }
 `);
 
