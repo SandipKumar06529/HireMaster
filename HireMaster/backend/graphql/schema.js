@@ -138,6 +138,24 @@ type Project {
   updatedAt: String
 }
 
+input BidInput {
+  project_id: ID!
+  freelancer_id: ID!
+  proposal: String
+  bid_amount: Float
+}
+
+type Bid {
+  id: ID!
+  project_id: ID!
+  freelancer_id: ID!
+  proposal: String
+  bid_amount: Float
+  submission_date: String
+  bid_status: String
+}
+
+
 
 
   type Mutation {
@@ -149,6 +167,8 @@ type Project {
     deleteProject(projectId: ID!): Boolean!
     registerFreelancer(userInput: UserInput!, freelancerInput: FreelancerInput!): AuthData!
     updateFreelancerProfile(input: UpdateFreelancerInput!): Freelancer!
+    submitBid(bidInput: BidInput!): Bid!
+
   }
 
   type Query {

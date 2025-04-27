@@ -72,7 +72,7 @@ export default function FreelancerProjectDetails() {
           <h2>Projects</h2>
         </header>
 
-        <h3 className="title">View, Bid and manage your Projects here!</h3>
+        <h3 className="title">View, Bid and Manage Your Projects Here!</h3>
 
         <div className="project-detail-card">
           <h2 className="project-title">{project.title}</h2>
@@ -111,7 +111,14 @@ export default function FreelancerProjectDetails() {
         </div>
       </main>
 
-      {showBidModal && <BidModal onClose={handleCloseBid} />}
+      {/* Pass project title and id to the BidModal */}
+      {showBidModal && (
+        <BidModal
+          onClose={handleCloseBid}
+          projectTitle={project.title}
+          projectId={project.id}
+        />
+      )}
     </div>
   );
 }

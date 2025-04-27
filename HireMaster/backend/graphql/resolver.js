@@ -4,6 +4,7 @@ const User = require('../models/User');
 const Client = require('../models/Client');
 const Project = require('../models/Project');
 const Freelancer = require('../models/Freelancer');
+const Bid = require("../models/Bid"); 
 
 
 const root = {
@@ -238,6 +239,20 @@ const root = {
   },
   getAllProjects: async () => {
     return await Project.find({ project_status: "Active" }).sort({ createdAt: -1 });
+  },
+  submitBid: async ({ bidInput }) => {
+    const newBid = new Bid({
+      project_id: bidInput.project_id,
+      freelancer_id: bidInput.freelancer_id,
+      proposal: bidInput.proposal,
+      bid_amount: bidInput.bid_amount
+    });
+  
+    const savedBid = await newBid.save();
+    return {
+      id: savedBid._id.toString(),
+      ...savedBid._doc
+    };
   },
   
   
