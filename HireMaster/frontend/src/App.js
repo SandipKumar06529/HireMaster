@@ -22,6 +22,7 @@ import FreelancerProjects from './components/Freelancer/FreelancerProjects';
 import FreelancerProjectDetails from './components/Freelancer/FreelancerProjectDetails';
 import FreelancerProfile from './components/Freelancer/FreelancerProfile';
 import EditFreelancerProfile from './components/Freelancer/editfreelancerProfile';
+import FreelancerManageBids from './components/Freelancer/FreelancerManageBids';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
         <Route path="/freelancer-projects" element={<FreelancerProjects/>} />
         {/* <Route path="/freelancer-projects-details" element={<FreelancerProjectDetails/>} /> */}
         <Route path="/freelancer-projects-details/:projectId" element={<FreelancerProjectDetails />} />
+        <Route path="/freelancer-bids" element={<FreelancerManageBids/>} />
 
         <Route path="/freelancer-profile" element={<FreelancerProfile/>} />
         <Route path="/freelancer-edit-Profile" element={<EditFreelancerProfile/>}/>

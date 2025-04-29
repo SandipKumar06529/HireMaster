@@ -82,6 +82,7 @@ export default function FreelancerProjects() {
           <Link to="/freelancer-dashboard" className="menu-item">Dashboard</Link>
           <Link to="/freelancer-projects" className="menu-item active">Projects</Link>
           <Link to="/freelancer-payments" className="menu-item">Payments</Link>
+          <Link to="/freelancer-bids" className="menu-item">Manage Bids</Link>
           <Link to="/freelancer-profile" className="menu-item">Profile</Link>
         </nav>
       </aside>
