@@ -49,6 +49,7 @@ export default function FreelancerProfile() {
           linkedin
           github
           experience_level
+          profile_picture
         }
       }
     `;
@@ -109,7 +110,11 @@ export default function FreelancerProfile() {
 
         <header className="profile-header">
           <div className="profile-info">
-            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="avatar" className="avatar" />
+            <img 
+              src={freelancerData.profile_picture || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"} 
+              alt="avatar" 
+              className="avatar" 
+            />
             <div>
               <h2>{freelancerData.first_name} {freelancerData.last_name}</h2>
               <p>{freelancerData.email}</p>
@@ -132,33 +137,33 @@ export default function FreelancerProfile() {
 
           <div className="form-row">
             <div className="form-group">
-              <label>University Name:</label>
+              <label>University Name</label>
               <input type="text" value={freelancerData.university_name || ""} readOnly />
             </div>
             <div className="form-group">
-              <label>Degree:</label>
+              <label>Degree</label>
               <input type="text" value={freelancerData.degree || ""} readOnly />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label>Major (Grad):</label>
+              <label>Major (Grad)</label>
               <input type="text" value={freelancerData.major_of_grad || ""} readOnly />
             </div>
             <div className="form-group">
-              <label>Major (Undergrad):</label>
+              <label>Major (Undergrad)</label>
               <input type="text" value={freelancerData.major_of_undergrad || ""} readOnly />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label>Phone Number:</label>
+              <label>Phone Number</label>
               <input type="text" value={freelancerData.phone_number || ""} readOnly />
             </div>
             <div className="form-group">
-              <label>Skills:</label>
+              <label>Skills</label>
               <input type="text" value={(freelancerData.skills || []).join(", ")} readOnly />
             </div>
           </div>
@@ -169,23 +174,21 @@ export default function FreelancerProfile() {
               <input type="email" value={freelancerData.email} readOnly />
             </div>
             <div className="form-group">
-              <label>LinkedIn:</label>
+              <label>LinkedIn</label>
               <input type="text" value={freelancerData.linkedin || ""} readOnly />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label>Experience Level:</label>
+              <label>Experience Level</label>
               <input type="text" value={freelancerData.experience_level || ""} readOnly />
             </div>
             <div className="form-group">
-              <label>GitHub:</label>
+              <label>GitHub</label>
               <input type="text" value={freelancerData.github || ""} readOnly />
             </div>
           </div>
-
-          
         </form>
       </main>
     </div>
