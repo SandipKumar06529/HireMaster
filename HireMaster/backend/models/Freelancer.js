@@ -14,6 +14,7 @@ const FreelancerSchema = new mongoose.Schema(
     linkedin: String,
     github: String,
     experience_level: String,
+    profile_picture: { type: String },
     profile_created: { type: Boolean, default: false },
   },
   { timestamps: true }
