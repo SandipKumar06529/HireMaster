@@ -16,13 +16,13 @@ import EditClientProfile from './components/client/editProfile/editClientProfile
 import FreelancerSignupStep1 from './components/Freelancer/FreelancerSignUpStep1';
 import FreelancerSignupStep2 from './components/Freelancer/FreelancerSignUpStep2';
 import FreelancerSignupStep3 from './components/Freelancer/FreelancerSignUpStep3';
-import FreelancerDashboard from './components/Freelancer/FreelancerDashboard';
-import FreelancerPayments from './components/Freelancer/FreelancerPayments';
-import FreelancerProjects from './components/Freelancer/FreelancerProjects';
-import FreelancerProjectDetails from './components/Freelancer/FreelancerProjectDetails';
-import FreelancerProfile from './components/Freelancer/FreelancerProfile';
-import EditFreelancerProfile from './components/Freelancer/editfreelancerProfile';
-import FreelancerManageBids from './components/Freelancer/FreelancerManageBids';
+import FreelancerDashboard from './components/Freelancer/FreelancerDashboard/FreelancerDashboard';
+import FreelancerPayments from './components/Freelancer/FreelancerPayments/FreelancerPayments';
+import FreelancerProjects from './components/Freelancer/FreelancerProjects/FreelancerProjects';
+import FreelancerProjectDetails from './components/Freelancer/FreelancerProjects/FreelancerProjectDetails';
+import FreelancerProfile from './components/Freelancer/FreelancerProfile/FreelancerProfile';
+import EditFreelancerProfile from './components/Freelancer/FreelancerProfile/editfreelancerProfile';
+import FreelancerManageBids from './components/Freelancer/FreelancerMangeBids/FreelancerManageBids';
 
 function App() {
   return (

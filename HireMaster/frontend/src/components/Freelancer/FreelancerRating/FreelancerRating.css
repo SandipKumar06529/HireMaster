@@ -1,0 +1,16 @@
+.freelancer-rating {
+    text-align: left;
+    margin-top: 1rem;
+  }
+  
+  .stars {
+    font-size: 1.5rem;
+    color: #facc15; /* gold */
+    margin-bottom: 0.2rem;
+  }
+  
+  .freelancer-rating p {
+    font-size: 0.95rem;
+    color: #374151;
+  }
+  
