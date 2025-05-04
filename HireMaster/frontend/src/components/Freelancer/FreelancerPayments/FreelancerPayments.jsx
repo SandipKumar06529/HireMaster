@@ -86,10 +86,10 @@ export default function FreelancerPayments() {
         prev.map((p) =>
           p._id === updated._id
             ? {
-                ...p,
-                payment_status: updated.payment_status,
-                payment_date_completed: updated.payment_date_completed,
-              }
+              ...p,
+              payment_status: updated.payment_status,
+              payment_date_completed: updated.payment_date_completed,
+            }
             : p
         )
       );
@@ -114,9 +114,8 @@ export default function FreelancerPayments() {
           <header className="top-navbar">
             <h2>Payments</h2>
             <div className="header-actions">
-              <div className="download"><button className="btn-download">⬇️ Download PDF Report</button></div>
+              <span className="notification">🔔<sup>2</sup></span>
               <div className="profile-wrapper" ref={menuRef}>
-                
                 <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
                 {showMenu && (
                   <div className="dropdown-menu">
@@ -127,6 +126,11 @@ export default function FreelancerPayments() {
               </div>
             </div>
           </header>
+
+          {/* <header className="payments-header">
+            <h3 className="title">View and manage your payments here!</h3>
+            <button className="btn-download">⬇ Download PDF Report</button>
+          </header> */}
 
           <table className="payments-table">
             <thead>
@@ -149,6 +153,7 @@ export default function FreelancerPayments() {
                 const clientName = payment.client_id?.user_id
                   ? `${payment.client_id.user_id.first_name} ${payment.client_id.user_id.last_name}`
                   : "N/A";
+
 
                 return (
                   <tr key={payment._id || index}>
