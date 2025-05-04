@@ -37,9 +37,10 @@ function App() {
         <Route path="/profile" element={<ClientProfile/>} />
         <Route path="/projects/new" element={<PostProject/>} />
         {/* <Route path="/projects/details" element={<ProjectDetails/>} /> */}
-        <Route path="/projects/details/bids" element={<ProjectBids/>} />
+        <Route path="/projects/:projectId/bids" element={<ProjectBids />} />
         <Route path="/editProfile" element={<EditClientProfile/>} />
         <Route path="/projects/:projectId" element={<ProjectDetails />} />
+        
 
   
 

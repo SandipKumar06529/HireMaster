@@ -10,6 +10,7 @@ const paymentSchema = new mongoose.Schema(
         payment_status: { type: String, enum: ['paid', 'unpaid'], default: 'unpaid' },
         payment_date_initiated: { type: Date, default: Date.now },
         payment_date_completed: { type: Date, default: null },
+        invoice_number: { type: String, required: true, unique: true },
     }, 
 { timestamps: true }
 ); 

@@ -3,29 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import "./FreelancerPayments.css";
 
 export default function FreelancerPayments() {
-  const payments = [
-    { invoice: "5146846548465", client: "Jane Cooper", date: "2/19/21", status: "Paid", amount: 500 },
-    { invoice: "5467319467348", client: "Wade Warren", date: "5/7/16", status: "Paid", amount: 500 },
-    { invoice: "1345705945446", client: "Esther Howard", date: "9/18/16", status: "Unpaid", amount: 500 },
-    { invoice: "5440754979", client: "Cameron Williamson", date: "2/11/12", status: "Paid", amount: 500 },
-    { invoice: "1243467984543", client: "Brooklyn Simmons", date: "9/18/16", status: "Unpaid", amount: 500 },
-    { invoice: "8454134649707", client: "Leslie Alexander", date: "1/28/17", status: "Unpaid", amount: 500 },
-    { invoice: "2130164040451", client: "Jenny Wilson", date: "5/27/15", status: "Paid", amount: 500 },
-    { invoice: "0439104645404", client: "Guy Hawkins", date: "8/2/19", status: "Paid", amount: 500 }
-  ];
-
-  // top navbar
-  // log out logic
+  const [payments, setPayments] = useState([]);
   const navigate = useNavigate();
-  const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
+  const freelancerId = localStorage.getItem("freelancerId");
 
   const toggleMenu = () => setShowMenu(!showMenu);
+  const [showMenu, setShowMenu] = useState(false);
+
   const handleLogout = () => {
-    alert("Logging out...");
-    localStorage.removeItem('token');  // Clear token
-    navigate('/');               // Redirect
-    // logout logic
+    localStorage.removeItem("token");
+    navigate("/");
   };
 
   useEffect(() => {
@@ -37,6 +25,74 @@ export default function FreelancerPayments() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    const fetchPayments = async () => {
+      const query = `
+        query {
+          getFreelancerPayments(freelancerId: "${freelancerId}") {
+            payment_id
+            invoice_number
+            amount
+            payment_status
+            payment_date_completed
+            client_id {
+              user_id {
+                first_name
+                last_name
+              }
+            }
+          }
+        }
+      `;
+
+      const res = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+
+      const json = await res.json();
+      setPayments(json?.data?.getFreelancerPayments || []);
+    };
+
+    if (freelancerId) fetchPayments();
+  }, [freelancerId]);
+
+  const handleMarkReceived = async (paymentId) => {
+    const mutation = `
+      mutation {
+        markPaymentAsPaid(paymentId: "${paymentId}") {
+          payment_id
+          payment_status
+          payment_date_completed
+        }
+      }
+    `;
+
+    const res = await fetch("http://localhost:4000/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: mutation }),
+    });
+
+    const result = await res.json();
+    const updated = result?.data?.markPaymentAsPaid;
+
+    if (updated) {
+      setPayments((prev) =>
+        prev.map((p) =>
+          p.payment_id === updated.payment_id
+            ? {
+                ...p,
+                payment_status: updated.payment_status,
+                payment_date_completed: updated.payment_date_completed,
+              }
+            : p
+        )
+      );
+    }
+  };
 
   return (
     <div className="dashboard-container">
@@ -53,11 +109,6 @@ export default function FreelancerPayments() {
 
       <main className="dashboard-main">
         <div className="freelancer-payments-container">
-          {/* <header className="payments-header">
-            <h2>Payments</h2>
-            <button className="btn-download">⬇️ Download PDF Report</button>
-          </header> */}
-
           <header className="top-navbar">
             <h2>Payments</h2>
             <div className="header-actions">
@@ -66,7 +117,7 @@ export default function FreelancerPayments() {
                 <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
                 {showMenu && (
                   <div className="dropdown-menu">
-                    <button onClick={() => navigate("/profile")}>My Profile</button>
+                    <button onClick={() => navigate("/freelancer-profile")}>My Profile</button>
                     <button onClick={handleLogout}>Log Out</button>
                   </div>
                 )}
@@ -75,40 +126,56 @@ export default function FreelancerPayments() {
           </header>
 
           <header className="payments-header">
-            <h3 className="title" >View and manage your payments here!</h3>
+            <h3 className="title">View and manage your payments here!</h3>
             <button className="btn-download">⬇️ Download PDF Report</button>
           </header>
 
           <table className="payments-table">
             <thead>
               <tr>
-                <th></th>
+                <th>PDF</th>
                 <th>INVOICE NUMBER</th>
                 <th>CLIENT</th>
                 <th>PAYMENT DATE</th>
                 <th>STATUS</th>
                 <th>AMOUNT</th>
-                <th></th>
+                <th>RECEIVED</th>
               </tr>
             </thead>
             <tbody>
-              {payments.map((payment, index) => (
-                <tr key={index}>
-                  <td><input type="checkbox" /></td>
-                  <td>{payment.invoice}</td>
-                  <td>{payment.client}</td>
-                  <td>{payment.date}</td>
-                  <td>
-                    <span className={`status ${payment.status.toLowerCase()}`}>{payment.status}</span>
-                  </td>
-                  <td>${payment.amount.toFixed(2)}</td>
-                  <td>
-                    <button className={`btn-request ${payment.status === 'Paid' ? 'disabled' : ''}`} disabled={payment.status === 'Paid'}>
-                      Request
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {payments.map((payment, index) => {
+                const isPaid = payment.payment_status === "paid";
+                const paymentDate = payment.payment_date_completed
+                  ? new Date(Number(payment.payment_date_completed)).toLocaleDateString("en-US")
+                  : "-";
+                const clientName = payment.client_id?.user_id
+                  ? `${payment.client_id.user_id.first_name} ${payment.client_id.user_id.last_name}`
+                  : "N/A";
+
+                return (
+                  <tr key={payment.payment_id || index}>
+                    <td><input type="checkbox" /></td>
+                    <td>{payment.invoice_number}</td>
+                    <td>{clientName}</td>
+                    <td>{paymentDate}</td>
+                    <td>
+                      <span className={`status ${payment.payment_status}`}>
+                        {payment.payment_status.toUpperCase()}
+                      </span>
+                    </td>
+                    <td>${payment.amount}</td>
+                    <td>
+                      <button
+                        className={`btn-request ${isPaid ? "disabled" : ""}`}
+                        disabled={isPaid}
+                        onClick={() => handleMarkReceived(payment.payment_id)}
+                      >
+                        Received
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
 

@@ -1,16 +1,102 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./ClientPayments.css";
 
 export default function ClientPayments() {
+  const [payments, setPayments] = useState([]);
+
+  const clientId = localStorage.getItem("clientId");
+
+  const fetchPayments = async () => {
+    const query = `
+      query {
+        getClientPayments(clientId: "${clientId}") {
+          payment_id
+          invoice_number
+          amount
+          payment_status
+          payment_date_completed
+          freelancer_id {
+            user_id {
+              first_name
+              last_name
+            }
+          }
+        }
+      }
+    `;
+
+    try {
+      const res = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+
+      const data = await res.json();
+      console.log("Fetched payments:", data?.data?.getClientPayments);
+      setPayments(data?.data?.getClientPayments || []);
+    } catch (error) {
+      console.error("Failed to fetch payments:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (clientId) fetchPayments();
+  }, [clientId]);
+
+  const handleMarkAsPaid = async (paymentId) => {
+    console.log("Marking payment as paid:", paymentId);
+    console.log("Sending mutation:", mutation);
+
+    const mutation = `
+      mutation {
+        markPaymentAsPaid(paymentId: "${paymentId}") {
+          payment_id
+          payment_status
+          payment_date_completed
+        }
+      }
+    `;
+
+    try {
+      const res = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: mutation }),
+      });
+
+      const result = await res.json();
+      const updated = result?.data?.markPaymentAsPaid;
+
+      if (!updated) return;
+
+      setPayments((prev) =>
+        prev.map((p) =>
+          p.payment_id === updated.payment_id
+            ? {
+              ...p,
+              payment_status: updated.payment_status,
+              payment_date_completed: updated.payment_date_completed,
+            }
+            : p
+        )
+      );
+      console.log("Mutation response:", result);
+
+    } catch (error) {
+      console.error("Payment update failed:", error);
+    }
+  };
+
   return (
     <div className="dashboard-container">
       <aside className="sidebar">
         <div className="logo">HM</div>
         <nav className="sidebar-menu">
-          <Link to="/dashboard" className="menu-item active">Dashboard</Link>
+          <Link to="/dashboard" className="menu-item">Dashboard</Link>
           <Link to="/projects" className="menu-item">Projects</Link>
-          <Link to="/payments" className="menu-item">Payments</Link>
+          <Link to="/payments" className="menu-item active">Payments</Link>
           <Link to="/profile" className="menu-item">Profile</Link>
         </nav>
       </aside>
@@ -26,47 +112,56 @@ export default function ClientPayments() {
           <table className="payments-table">
             <thead>
               <tr>
-                <th></th>
                 <th>Invoice Number</th>
                 <th>Freelancer</th>
                 <th>Payment Date</th>
                 <th>Status</th>
                 <th>Amount</th>
-                <th></th>
+                <th>Pay</th>
               </tr>
             </thead>
             <tbody>
-              {[
-                { id: "5146846548465", name: "Jane Cooper", date: "2/19/21", status: "Paid" },
-                { id: "5467319467348", name: "Wade Warren", date: "5/7/16", status: "Paid" },
-                { id: "1345705945446", name: "Esther Howard", date: "9/18/16", status: "Unpaid" },
-                { id: "5440754979", name: "Cameron Williamson", date: "2/11/12", status: "Paid" },
-                { id: "1243467984543", name: "Brooklyn Simmons", date: "9/18/16", status: "Unpaid" },
-                { id: "8454134649707", name: "Leslie Alexander", date: "1/28/17", status: "Unpaid" },
-                { id: "2130164040451", name: "Jenny Wilson", date: "5/27/15", status: "Paid" },
-                { id: "0439104645404", name: "Guy Hawkins", date: "8/2/19", status: "Paid" },
-              ].map((payment, index) => (
-                <tr key={index}>
-                  <td><input type="checkbox" /></td>
-                  <td>{payment.id}</td>
-                  <td>{payment.name}</td>
-                  <td>{payment.date}</td>
-                  <td>
-                    <span className={`status ${payment.status.toLowerCase()}`}>
-                      {payment.status}
-                    </span>
-                  </td>
-                  <td>$500.00</td>
-                  <td>
-                    <button
-                      className={`btn-pay ${payment.status === "Paid" ? "disabled" : ""}`}
-                      disabled={payment.status === "Paid"}
-                    >
-                      Pay
-                    </button>
-                  </td>
+              {payments.length === 0 ? (
+                <tr>
+                  <td colSpan="6">No payments found.</td>
                 </tr>
-              ))}
+              ) : (
+                payments.map((payment, index) => {
+                  if (!payment) return null;
+
+                  const isPaid = payment.payment_status === "paid";
+                  const paymentDate = payment.payment_date_completed
+                    ? new Date(Number(payment.payment_date_completed)).toLocaleDateString("en-US")
+                    : "-";
+
+
+                  return (
+                    <tr key={payment.payment_id || index}>
+                      <td>{payment.invoice_number}</td>
+                      <td>
+                        {payment.freelancer_id?.user_id?.first_name}{" "}
+                        {payment.freelancer_id?.user_id?.last_name}
+                      </td>
+                      <td>{paymentDate}</td>
+                      <td>
+                        <span className={`status ${payment.payment_status}`}>
+                          {payment.payment_status.toUpperCase()}
+                        </span>
+                      </td>
+                      <td>${payment.amount}</td>
+                      <td>
+                        <button
+                          className={`btn-pay ${isPaid ? "disabled" : ""}`}
+                          disabled={isPaid}
+                          onClick={() => handleMarkAsPaid(payment.payment_id)}
+                        >
+                          Paid
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </section>

@@ -66,7 +66,7 @@ export default function ProjectDetails() {
           <h3>View, Bid and manage your Projects here!</h3>
 
           <div className="project-full-card">
-            <h4>{project.title}p</h4>
+            <h4>{project.title}</h4>
             <div className="project-meta">
               <span>💰 Budget: ${project.budget}</span>
               <span>📅 Posted:  {new Date(project.createdAt).toLocaleDateString()}</span>
@@ -101,7 +101,7 @@ export default function ProjectDetails() {
             </ul>
 
             <div className="details-buttons">
-              <button className="btn-bid" onClick={()=> navigate("/projects/details/bids")} >Bids</button>
+              <button className="btn-bid" onClick={()=> navigate(`/projects/${projectId}/bids`)} >Bids</button>
               <button className="btn-cancel" onClick={() => navigate("/projects")}>Cancel</button>
 
             </div>
