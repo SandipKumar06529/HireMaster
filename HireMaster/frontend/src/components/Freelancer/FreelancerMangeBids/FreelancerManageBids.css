@@ -1,3 +1,4 @@
+css
 /* Container */
 .dashboard-container {
   display: flex;
@@ -264,7 +265,7 @@
 }
 
 .btn-cancel:hover {
-  background-color: #dc2626;
+  background-color: #9c1717;
 }
 
 /* Fade-in Title Animation */

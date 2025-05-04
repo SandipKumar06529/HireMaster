@@ -68,11 +68,10 @@ export default function FreelancerProjectDetails() {
       </aside>
 
       <main className="dashboard-main">
-        <header className="projects-header">
+      <header className="top-navbar">
           <h2>Projects</h2>
-        </header>
-
-        <h3 className="title">View, Bid and Manage Your Projects Here!</h3>
+          
+        </header>       
 
         <div className="project-detail-card">
           <h2 className="project-title">{project.title}</h2>

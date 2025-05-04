@@ -8,9 +8,9 @@ export default function ClientPayments() {
       <aside className="sidebar">
         <div className="logo">HM</div>
         <nav className="sidebar-menu">
-          <Link to="/dashboard" className="menu-item active">Dashboard</Link>
+          <Link to="/dashboard" className="menu-item ">Dashboard</Link>
           <Link to="/projects" className="menu-item">Projects</Link>
-          <Link to="/payments" className="menu-item">Payments</Link>
+          <Link to="/payments" className="menu-item active">Payments</Link>
           <Link to="/profile" className="menu-item">Profile</Link>
         </nav>
       </aside>
@@ -22,7 +22,7 @@ export default function ClientPayments() {
         </header>
 
         <section className="payments-section">
-          <h3>View and manage your payments here!</h3>
+          {/* <h3>View and manage your payments here!</h3> */}
           <table className="payments-table">
             <thead>
               <tr>

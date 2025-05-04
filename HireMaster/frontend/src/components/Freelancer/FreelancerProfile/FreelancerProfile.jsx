@@ -98,7 +98,7 @@ export default function FreelancerProfile() {
         <header className="top-navbar">
           <h2>Profile</h2>
           <div className="header-actions">
-            <span className="notification">🔔<sup>2</sup></span>
+            {/* <span className="notification">🔔<sup>2</sup></span> */}
             <div className="profile-wrapper" ref={menuRef}>
               <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
               {showMenu && (

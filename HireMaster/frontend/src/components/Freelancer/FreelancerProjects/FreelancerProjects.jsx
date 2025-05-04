@@ -91,7 +91,7 @@ export default function FreelancerProjects() {
         <header className="top-navbar">
           <h2>Projects</h2>
           <div className="header-actions">
-            <span className="notification">🔔<sup>2</sup></span>
+            
             <div className="profile-wrapper" ref={menuRef}>
               <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
               {showMenu && (
@@ -104,7 +104,7 @@ export default function FreelancerProjects() {
           </div>
         </header>
 
-        <h3 className="title">View, Bid and Manage Your Projects Here!</h3>
+        
 
         <div className="project-list">
           {projects.length > 0 ? (

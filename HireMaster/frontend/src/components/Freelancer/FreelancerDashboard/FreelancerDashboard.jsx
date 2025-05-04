@@ -4,6 +4,47 @@ import "./FreelancerDashboard.css";
 import { assets } from "../../../assets/assets";
 
 export default function FreelancerDashboard() {
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [readNotifications, setReadNotifications] = useState([]);
+  const notificationRef = useRef(null);
+
+  const notifications = [
+    { text: "Your bid on 'Stock Market Tracking App' has been accepted! 🎉", type: "accepted" },
+    { text: "You have a new project invitation: 'Mobile Fitness App'. 📩", type: "invitation" },
+    { text: "Reminder: Update your profile to attract more clients.", type: "general" }
+  ];
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+    if (!showNotifications) {
+      setTimeout(() => {
+        setShowNotifications(false);
+      }, 5000); // Auto-hide after 5 sec
+    }
+  };
+
+  const markAsRead = (index) => {
+    if (!readNotifications.includes(index)) {
+      setReadNotifications([...readNotifications, index]);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setShowMenu(false);
+      }
+      if (notificationRef.current && !notificationRef.current.contains(e.target)) {
+        setShowNotifications(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+
+
+  // Sample data for projects
   const projects = [
     { title: "AI Chatbot UI", client: "Yuhua Cao", bid: 6000, status: "Active" },
     { title: "Expense Tracking Web App", client: "Brian Imohe", bid: 15000, status: "Inactive" },
@@ -54,7 +95,25 @@ export default function FreelancerDashboard() {
         <header className="dashboard-header">
           <h2>Dashboard</h2>
           <div className="header-actions">
-            <span className="notification">🔔<sup>2</sup></span>
+            {/* Notification */}
+            <div className="notification-wrapper" ref={notificationRef}>
+              <span className="notification" onClick={toggleNotifications}>
+                🔔<sup>{notifications.length - readNotifications.length}</sup>
+              </span>
+              {showNotifications && (
+                <div className="notifications-popup">
+                  {notifications.map((note, idx) => (
+                    <div
+                      key={idx}
+                      className={`notification-item ${readNotifications.includes(idx) ? 'read' : ''}`}
+                      onClick={() => markAsRead(idx)}
+                    >
+                      {note.text}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             <div className="profile-wrapper" ref={menuRef}>
               <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
               {showMenu && (
@@ -72,16 +131,16 @@ export default function FreelancerDashboard() {
           <h2>Amy Wong</h2>
         </section> */}
         <section className="welcome-section">
-                  <img src={assets.Background_dashboard} alt="background" className="background-img" />
-        
-                  <div className="welcome-content">
-                    <div className="text-content">
-                      <h1>Welcome To HireMaster</h1>
-                      <h2>Amy Wong</h2>
-                    </div>
-                    <img src={assets.dashboard_image} alt="illustration" className="foreground-img" />
-                  </div>
-                </section>
+          <img src={assets.Background_dashboard} alt="background" className="background-img" />
+
+          <div className="welcome-content">
+            <div className="text-content">
+              <h1>Welcome To HireMaster</h1>
+              <h2>Amy Wong</h2>
+            </div>
+            <img src={assets.dashboard_image} alt="illustration" className="foreground-img" />
+          </div>
+        </section>
 
         <section className="stats-section">
           <div className="stat-card">
@@ -105,7 +164,7 @@ export default function FreelancerDashboard() {
             <p className="stat-positive">+4.5%</p>
           </div>
         </section>
-        
+
 
         <section className="projects-section">
           <div className="projects-header">

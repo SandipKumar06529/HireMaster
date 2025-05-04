@@ -61,8 +61,9 @@ export default function FreelancerPayments() {
           <header className="top-navbar">
             <h2>Payments</h2>
             <div className="header-actions">
-              <span className="notification">🔔<sup>2</sup></span>
+              <div className="download"><button className="btn-download">⬇️ Download PDF Report</button></div>
               <div className="profile-wrapper" ref={menuRef}>
+                
                 <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
                 {showMenu && (
                   <div className="dropdown-menu">
@@ -75,8 +76,8 @@ export default function FreelancerPayments() {
           </header>
 
           <header className="payments-header">
-            <h3 className="title" >View and manage your payments here!</h3>
-            <button className="btn-download">⬇️ Download PDF Report</button>
+            
+            
           </header>
 
           <table className="payments-table">

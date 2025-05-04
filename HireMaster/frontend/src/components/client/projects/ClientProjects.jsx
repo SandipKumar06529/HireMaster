@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./ClientProjects.css";
 
@@ -9,6 +9,17 @@ export default function ClientProjects() {
   const [projects, setProjects] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState(null);
+
+  const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef(null);
+
+  const toggleMenu = () => setShowMenu(!showMenu);
+  const handleLogout = () => {
+    alert("Logging out...");
+    localStorage.removeItem('token');  // Clear token
+    navigate('/');               // Redirect
+    // logout logic
+  };
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -52,14 +63,14 @@ export default function ClientProjects() {
         deleteProject(projectId: "${projectToDelete}")
       }
     `;
-  
+
     try {
       const res = await fetch("http://localhost:4000/graphql", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: mutation }),
       });
-  
+
       const json = await res.json();
       if (json.data?.deleteProject) {
         setProjects(projects.filter((p) => p.id !== projectToDelete));
@@ -71,11 +82,11 @@ export default function ClientProjects() {
       console.error("Error deleting project:", err);
       alert("Something went wrong.");
     }
-  
+
     setShowModal(false);
     setProjectToDelete(null);
   };
-  
+
 
   return (
     <div className="dashboard-container">
@@ -92,11 +103,21 @@ export default function ClientProjects() {
       <main className="dashboard-main">
         <header className="dashboard-header">
           <h2>Projects</h2>
-          <button className="btn-post" onClick={() => navigate("/projects/new")}>Post Project</button>
+          <div className="profile-wrapper" ref={menuRef}>
+            <button className="btn-post" onClick={() => navigate("/projects/new")}>Post Project</button>
+            <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
+            {showMenu && (
+              <div className="dropdown-menu">
+                <button onClick={() => navigate("/profile")}>My Profile</button>
+                <button onClick={handleLogout}>Log Out</button>
+              </div>
+            )}
+          </div>
+
         </header>
 
         <section className="projects-section">
-          <h3>View, post, and manage your Projects here!</h3>
+          {/* <h3>View, post, and manage your Projects here!</h3> */}
 
           {projects.length === 0 ? (
             <p>No projects posted yet.</p>

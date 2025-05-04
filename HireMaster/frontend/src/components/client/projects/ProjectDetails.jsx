@@ -103,7 +103,6 @@ export default function ProjectDetails() {
             <div className="details-buttons">
               <button className="btn-bid" onClick={()=> navigate("/projects/details/bids")} >Bids</button>
               <button className="btn-cancel" onClick={() => navigate("/projects")}>Cancel</button>
-
             </div>
           </div>
         </section>

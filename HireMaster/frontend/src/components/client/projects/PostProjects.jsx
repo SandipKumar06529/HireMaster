@@ -90,7 +90,7 @@ export default function PostProject() {
           <form onSubmit={handleSubmit} className="project-form">
             <label>
               Project Title:
-              <input type="text" name="title" value={form.title} onChange={handleChange} required />
+              <textarea type="text" name="title" value={form.title} onChange={handleChange} required />
             </label>
 
             <label>
