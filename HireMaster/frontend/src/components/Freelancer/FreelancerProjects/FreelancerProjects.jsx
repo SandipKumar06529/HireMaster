@@ -5,6 +5,7 @@ import "./FreelancerProjects.css";
 export default function FreelancerProjects() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
+  const [bidProjectIds, setBidProjectIds] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -24,7 +25,6 @@ export default function FreelancerProjects() {
 
   const handleConfirmDeletion = () => {
     console.log(`Deleting: ${selectedProject}`);
-    // TODO: Add backend delete logic here
     setIsDialogOpen(false);
     setSelectedProject(null);
   };
@@ -61,8 +61,40 @@ export default function FreelancerProjects() {
     }
   };
 
+  const fetchFreelancerBids = async () => {
+    const freelancerId = localStorage.getItem("freelancerId");
+    if (!freelancerId) return;
+
+    const query = `
+      query {
+        getBidsByFreelancerId(freelancerId: "${freelancerId}") {
+          project_id {
+            id
+          }
+        }
+      }
+    `;
+
+    try {
+      const res = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+
+      const json = await res.json();
+      if (json?.data?.getBidsByFreelancerId) {
+        const ids = json.data.getBidsByFreelancerId.map(bid => bid.project_id.id);
+        setBidProjectIds(ids);
+      }
+    } catch (err) {
+      console.error("Error fetching bids:", err);
+    }
+  };
+
   useEffect(() => {
     fetchProjects();
+    fetchFreelancerBids();
 
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -110,7 +142,12 @@ export default function FreelancerProjects() {
           {projects.length > 0 ? (
             projects.map((project) => (
               <div className="project-card" key={project.id}>
-                <h2 className="project-title">{project.title}</h2>
+                <div className="project-title-wrapper">
+                  <h2 className="project-title">{project.title}</h2>
+                  {bidProjectIds.includes(project.id) && (
+                    <span className="already-bid-label">✅ Already Bid</span>
+                  )}
+                </div>
                 <p className="project-meta">
                   <span>💰 Budget: ${project.budget}</span>
                   <span>
@@ -131,11 +168,6 @@ export default function FreelancerProjects() {
                   <button className="btn-read-more" onClick={() => navigate(`/freelancer-projects-details/${project.id}`)}>
                     Read More
                   </button>
-
-                  {/* Optional delete logic */}
-                  {/* <button className="btn-delete-Project" onClick={() => handleOpenDialog(project.title)}>
-                    Delete
-                  </button> */}
                 </div>
               </div>
             ))

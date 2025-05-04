@@ -11,7 +11,7 @@ const schema = buildSchema(`
 
   type Client {
     id: ID!
-    user_id: ID!
+    user_id: User!
     first_name: String
     last_name: String
     company_name: String!
@@ -38,7 +38,7 @@ const schema = buildSchema(`
 }
   type Freelancer {
   id: ID!
-  user_id: ID!
+  user_id: User!
   first_name: String
   last_name: String
   university_name: String
@@ -148,11 +148,23 @@ input BidInput {
 type Bid {
   id: ID!
   project_id: Project!
-  freelancer_id: ID!
+  freelancer_id: Freelancer!
   proposal: String
   bid_amount: Float
   submission_date: String
   bid_status: String
+}
+  type Payment {
+  _id: ID!
+  payment_id: ID!
+  project_id: ID!
+  client_id: Client!
+  freelancer_id: Freelancer!
+  amount: Float!
+  payment_status: String!
+  payment_date_initiated: String!
+  payment_date_completed: String
+  invoice_number: String!  
 }
 
 
@@ -169,6 +181,9 @@ type Bid {
     updateFreelancerProfile(input: UpdateFreelancerInput!): Freelancer!
     submitBid(bidInput: BidInput!): Bid!
     cancelBid(bidId: ID!): Boolean!
+    acceptBid(bidId: ID!, projectId: ID!): Boolean!
+    createPayment(projectId: ID!, clientId: ID!, freelancerId: ID!, amount: Float!): Payment
+    markPaymentAsPaid(paymentId: ID!): Payment
 
   }
 
@@ -181,6 +196,9 @@ type Bid {
     getFreelancerByUserId(userId: ID!): Freelancer
     getAllProjects: [Project!]!
     getBidsByFreelancerId(freelancerId: ID!): [Bid!]!
+    getBidsByProjectId(projectId: ID!): [Bid!]!
+    getClientPayments(clientId: ID!): [Payment]
+    getFreelancerPayments(freelancerId: ID!): [Payment]
   }
 `);
 

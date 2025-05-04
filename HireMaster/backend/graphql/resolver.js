@@ -5,6 +5,7 @@ const Client = require('../models/Client');
 const Project = require('../models/Project');
 const Freelancer = require('../models/Freelancer');
 const Bid = require("../models/Bid"); 
+const Payment = require('../models/Payment');
 
 
 const root = {
@@ -269,11 +270,128 @@ const root = {
     await Bid.findByIdAndDelete(bidId);
     return true;
   },
+  acceptBid: async ({ bidId, projectId }) => {
+    // Step 1: Find selected bid
+    const selectedBid = await Bid.findById(bidId);
+    if (!selectedBid) throw new Error("Bid not found");
+  
+    // Step 2: Prevent multiple accepted bids for the same project
+    const existingAccepted = await Bid.findOne({ project_id: projectId, bid_status: "Accepted" });
+    if (existingAccepted) throw new Error("A bid has already been accepted for this project.");
+  
+    // Step 3: Mark selected bid as accepted
+    selectedBid.bid_status = "Accepted";
+    await selectedBid.save();
+  
+    // Step 4: Get the project to retrieve the client ID
+    const project = await Project.findById(selectedBid.project_id);
+    if (!project) throw new Error("Project not found");
+  
+    // Step 5: Generate unique invoice number
+    const generateInvoiceNumber = () => {
+      const timestamp = Date.now();
+      const random = Math.floor(1000 + Math.random() * 9000); // e.g. INV-1714824729172-4390
+      return `INV-${timestamp}-${random}`;
+    };
+  
+    const invoiceNumber = generateInvoiceNumber();
+  
+    // Step 6: Create new payment
+    const payment = new Payment({
+      invoice_number: invoiceNumber,
+      project_id: selectedBid.project_id,
+      client_id: project.client_id,
+      freelancer_id: selectedBid.freelancer_id,
+      amount: selectedBid.bid_amount,
+      payment_status: 'unpaid',
+      payment_date_initiated: new Date()
+    });
+  
+    await payment.save();
+    console.log("✅ Payment created:", payment);
+  
+    // Step 7: Reject all other bids for this project
+    await Bid.updateMany(
+      { project_id: projectId, _id: { $ne: bidId } },
+      { $set: { bid_status: "Rejected" } }
+    );
+  
+    return true;
+  },
   
   
-  
-  
-  
+  getBidsByProjectId: async ({ projectId }) => {
+    return await Bid.find({ project_id: projectId })
+      .populate({
+        path: "freelancer_id",
+        populate: {
+          path: "user_id",
+          model: "User"
+        }
+      });
+  },
+  // PAYMENT QUERIES
+getClientPayments: async ({ clientId }) => {
+  return await Payment.find({ client_id: clientId }).populate({
+    path: 'freelancer_id',
+    populate: { path: 'user_id' } // to get freelancer name
+  });
+},
+
+// PAYMENT MUTATIONS
+createPayment: async ({ projectId, clientId, freelancerId, amount }) => {
+  const payment = new Payment({
+    project_id: projectId,
+    client_id: clientId,
+    freelancer_id: freelancerId,
+    amount,
+    payment_status: 'unpaid',
+    payment_date_initiated: new Date(),
+  });
+  await payment.save();
+  return payment;
+},
+
+markPaymentAsPaid: async ({ paymentId }) => {
+  console.log("Received paymentId:", paymentId);
+
+  try {
+    const updatedPayment = await Payment.findByIdAndUpdate(
+      paymentId,
+      {
+        payment_status: "paid",
+        payment_date_completed: new Date(),
+      },
+      { new: true }
+    );
+
+    if (!updatedPayment) {
+      console.log("No payment found to update.");
+      return null;
+    }
+
+    console.log("Successfully updated payment:", updatedPayment);
+    return {
+      _id: updatedPayment._id,
+      payment_status: updatedPayment.payment_status,
+      payment_date_completed: updatedPayment.payment_date_completed,
+    };
+    
+  } catch (error) {
+    console.error("Error in markPaymentAsPaid:", error);
+    throw new Error("Failed to mark payment as paid.");
+  }
+},
+getFreelancerPayments: async ({ freelancerId }) => {
+  return await Payment.find({ freelancer_id: freelancerId }).populate({
+    path: 'client_id',
+    populate: { path: 'user_id' }
+  });
+},
+
+
+
+
 
   users: async () => await User.find(),
   clients: async () => await Client.find()

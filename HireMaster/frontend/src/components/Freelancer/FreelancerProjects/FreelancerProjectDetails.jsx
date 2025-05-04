@@ -8,6 +8,7 @@ export default function FreelancerProjectDetails() {
   const navigate = useNavigate();
   const [showBidModal, setShowBidModal] = useState(false);
   const [project, setProject] = useState(null);
+  const [hasAlreadyBid, setHasAlreadyBid] = useState(false);
 
   const handleOpenBid = () => setShowBidModal(true);
   const handleCloseBid = () => setShowBidModal(false);
@@ -47,9 +48,40 @@ export default function FreelancerProjectDetails() {
     }
   };
 
+  const checkIfAlreadyBid = async () => {
+    const freelancerId = localStorage.getItem("freelancerId");
+    if (!freelancerId || !projectId) return;
+
+    const query = `
+      query {
+        getBidsByFreelancerId(freelancerId: "${freelancerId}") {
+          project_id {
+            id
+          }
+        }
+      }
+    `;
+
+    try {
+      const res = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+
+      const json = await res.json();
+      const bids = json?.data?.getBidsByFreelancerId || [];
+      const alreadyBid = bids.some((bid) => bid.project_id.id === projectId);
+      setHasAlreadyBid(alreadyBid);
+    } catch (error) {
+      console.error("Error checking bid status:", error);
+    }
+  };
+
   useEffect(() => {
     if (projectId) {
       fetchProjectDetails();
+      checkIfAlreadyBid();
     }
   }, [projectId]);
 
@@ -105,18 +137,24 @@ export default function FreelancerProjectDetails() {
           )}
 
           <div className="project-actions">
-            <button className="btn-bid" onClick={handleOpenBid}>Bid</button>
+            {hasAlreadyBid ? (
+              <button className="btn-disabled" disabled>You already bid</button>
+            ) : (
+              <button className="btn-bid" onClick={handleOpenBid}>Bid</button>
+            )}
             <button className="btn-cancel" onClick={() => navigate("/freelancer-projects")}>Cancel</button>
           </div>
         </div>
       </main>
 
-      {/* Pass project title and id to the BidModal */}
+      {/* BidModal with budget & freelancerId passed */}
       {showBidModal && (
         <BidModal
           onClose={handleCloseBid}
           projectTitle={project.title}
           projectId={project.id}
+          projectBudget={project.budget}
+          freelancerId={localStorage.getItem("freelancerId")}
         />
       )}
     </div>
