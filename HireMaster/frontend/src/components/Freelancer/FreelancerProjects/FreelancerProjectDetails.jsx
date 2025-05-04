@@ -63,15 +63,16 @@ export default function FreelancerProjectDetails() {
           <Link to="/freelancer-dashboard" className="menu-item">Dashboard</Link>
           <Link to="/freelancer-projects" className="menu-item active">Projects</Link>
           <Link to="/freelancer-payments" className="menu-item">Payments</Link>
+          <Link to="/freelancer-bids" className="menu-item">Manage Bids</Link>
           <Link to="/freelancer-profile" className="menu-item">Profile</Link>
         </nav>
       </aside>
 
       <main className="dashboard-main">
-      <header className="top-navbar">
+        <header className="top-navbar">
           <h2>Projects</h2>
-          
-        </header>       
+
+        </header>
 
         <div className="project-detail-card">
           <h2 className="project-title">{project.title}</h2>

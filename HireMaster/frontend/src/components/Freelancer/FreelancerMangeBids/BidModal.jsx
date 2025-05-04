@@ -77,7 +77,7 @@ export default function BidModal({ onClose, projectTitle, projectId }) {
           />
 
           <div className="modal-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>Cancel</button>
+            <button type="cancel" className="cancel-btn" onClick={onClose}>Cancel</button>
             <button type="submit" className="submit-btn">Submit</button>
           </div>
         </form>
