@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import "./FreelancerProjectDetails.css";
-import BidModal from "./BidModal";
+import BidModal from "../FreelancerMangeBids/BidModal";
 
 export default function FreelancerProjectDetails() {
   const { projectId } = useParams();

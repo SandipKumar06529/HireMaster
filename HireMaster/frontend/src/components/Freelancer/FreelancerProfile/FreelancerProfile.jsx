@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./FreelancerProfile.css";
+import FreelancerRating from "../FreelancerRating/FreelancerRating"; // adjust path if needed
+
 
 export default function FreelancerProfile() {
   const navigate = useNavigate();
@@ -111,14 +113,16 @@ export default function FreelancerProfile() {
 
         <header className="profile-header">
           <div className="profile-info">
-            <img 
-              src={freelancerData.profile_picture || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"} 
-              alt="avatar" 
-              className="avatar" 
+            <img
+              src={freelancerData.profile_picture || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"}
+              alt="avatar"
+              className="avatar"
             />
             <div>
               <h2>{freelancerData.first_name} {freelancerData.last_name}</h2>
               <p>{freelancerData.email}</p>
+              {/* 👇 Freelancer Rating Component */}
+              <FreelancerRating rating={4.7} reviews={28} />
             </div>
           </div>
           <button className="edit-btn" onClick={() => navigate("/freelancer-edit-Profile")}>Edit</button>

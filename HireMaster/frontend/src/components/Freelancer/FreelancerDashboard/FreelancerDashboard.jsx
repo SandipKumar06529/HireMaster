@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./FreelancerDashboard.css";
-import { assets } from "../../assets/assets";
+import { assets } from "../../../assets/assets";
 
 export default function FreelancerDashboard() {
   const projects = [
