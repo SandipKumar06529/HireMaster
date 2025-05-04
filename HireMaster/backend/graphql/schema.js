@@ -147,7 +147,7 @@ input BidInput {
 
 type Bid {
   id: ID!
-  project_id: ID!
+  project_id: Project!
   freelancer_id: ID!
   proposal: String
   bid_amount: Float
@@ -168,6 +168,7 @@ type Bid {
     registerFreelancer(userInput: UserInput!, freelancerInput: FreelancerInput!): AuthData!
     updateFreelancerProfile(input: UpdateFreelancerInput!): Freelancer!
     submitBid(bidInput: BidInput!): Bid!
+    cancelBid(bidId: ID!): Boolean!
 
   }
 
@@ -179,6 +180,7 @@ type Bid {
     getProjectById(id: ID!): Project
     getFreelancerByUserId(userId: ID!): Freelancer
     getAllProjects: [Project!]!
+    getBidsByFreelancerId(freelancerId: ID!): [Bid!]!
   }
 `);
 

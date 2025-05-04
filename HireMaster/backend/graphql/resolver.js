@@ -253,7 +253,24 @@ const root = {
       id: savedBid._id.toString(),
       ...savedBid._doc
     };
+    
   },
+  getBidsByFreelancerId: async ({ freelancerId }) => {
+    return await Bid.find({ freelancer_id: freelancerId, bid_status: "Pending" })
+      .populate("project_id")
+      .sort({ createdAt: -1 });
+  },
+  
+  cancelBid: async ({ bidId }) => {
+    const bid = await Bid.findById(bidId);
+    if (!bid) throw new Error("Bid not found");
+    if (bid.bid_status !== "Pending") throw new Error("Only pending bids can be cancelled");
+  
+    await Bid.findByIdAndDelete(bidId);
+    return true;
+  },
+  
+  
   
   
   
