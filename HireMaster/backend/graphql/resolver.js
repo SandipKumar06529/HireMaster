@@ -353,25 +353,45 @@ createPayment: async ({ projectId, clientId, freelancerId, amount }) => {
 },
 
 markPaymentAsPaid: async ({ paymentId }) => {
-  const updated = await Payment.findByIdAndUpdate(
-    paymentId,
-    {
-      payment_status: 'paid',
-      payment_date_completed: new Date().toISOString(),
-    },
-    { new: true }
-  );
-  return updated;
+  console.log("Received paymentId:", paymentId);
+
+  try {
+    const updatedPayment = await Payment.findByIdAndUpdate(
+      paymentId,
+      {
+        payment_status: "paid",
+        payment_date_completed: new Date(),
+      },
+      { new: true }
+    );
+
+    if (!updatedPayment) {
+      console.log("No payment found to update.");
+      return null;
+    }
+
+    console.log("Successfully updated payment:", updatedPayment);
+    return {
+      _id: updatedPayment._id,
+      payment_status: updatedPayment.payment_status,
+      payment_date_completed: updatedPayment.payment_date_completed,
+    };
+    
+  } catch (error) {
+    console.error("Error in markPaymentAsPaid:", error);
+    throw new Error("Failed to mark payment as paid.");
+  }
 },
 getFreelancerPayments: async ({ freelancerId }) => {
   return await Payment.find({ freelancer_id: freelancerId }).populate({
     path: 'client_id',
-    populate: { path: 'user_id' } // So we can get client name
+    populate: { path: 'user_id' }
   });
 },
 
 
-  
+
+
 
   users: async () => await User.find(),
   clients: async () => await Client.find()

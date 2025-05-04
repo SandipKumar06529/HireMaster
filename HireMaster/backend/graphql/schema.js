@@ -155,6 +155,7 @@ type Bid {
   bid_status: String
 }
   type Payment {
+  _id: ID!
   payment_id: ID!
   project_id: ID!
   client_id: Client!

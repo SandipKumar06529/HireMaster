@@ -11,7 +11,7 @@ export default function ClientPayments() {
     const query = `
       query {
         getClientPayments(clientId: "${clientId}") {
-          payment_id
+          _id
           invoice_number
           amount
           payment_status
@@ -46,16 +46,14 @@ export default function ClientPayments() {
   }, [clientId]);
 
   const handleMarkAsPaid = async (paymentId) => {
-    console.log("Marking payment as paid:", paymentId);
-    console.log("Sending mutation:", mutation);
-
     const mutation = `
       mutation {
         markPaymentAsPaid(paymentId: "${paymentId}") {
-          payment_id
-          payment_status
-          payment_date_completed
-        }
+        _id
+        payment_status
+        payment_date_completed
+      }
+
       }
     `;
 
@@ -69,11 +67,16 @@ export default function ClientPayments() {
       const result = await res.json();
       const updated = result?.data?.markPaymentAsPaid;
 
+      console.log("Updated payment:", updated);
+      console.log("Before state update:", payments);
+      console.log("Received paymentId:", paymentId);
+
+
       if (!updated) return;
 
       setPayments((prev) =>
         prev.map((p) =>
-          p.payment_id === updated.payment_id
+          p._id === updated._id
             ? {
               ...p,
               payment_status: updated.payment_status,
@@ -82,8 +85,6 @@ export default function ClientPayments() {
             : p
         )
       );
-      console.log("Mutation response:", result);
-
     } catch (error) {
       console.error("Payment update failed:", error);
     }
@@ -122,21 +123,19 @@ export default function ClientPayments() {
             </thead>
             <tbody>
               {payments.length === 0 ? (
-                <tr>
-                  <td colSpan="6">No payments found.</td>
-                </tr>
+                <tr><td colSpan="6">No payments found.</td></tr>
               ) : (
                 payments.map((payment, index) => {
                   if (!payment) return null;
 
                   const isPaid = payment.payment_status === "paid";
                   const paymentDate = payment.payment_date_completed
-                    ? new Date(Number(payment.payment_date_completed)).toLocaleDateString("en-US")
+                    ? new Date(Number(payment.payment_date_completed)).toLocaleDateString()
                     : "-";
 
 
                   return (
-                    <tr key={payment.payment_id || index}>
+                    <tr key={payment._id || index}>
                       <td>{payment.invoice_number}</td>
                       <td>
                         {payment.freelancer_id?.user_id?.first_name}{" "}
@@ -153,9 +152,9 @@ export default function ClientPayments() {
                         <button
                           className={`btn-pay ${isPaid ? "disabled" : ""}`}
                           disabled={isPaid}
-                          onClick={() => handleMarkAsPaid(payment.payment_id)}
+                          onClick={() => handleMarkAsPaid(payment._id)}
                         >
-                          Paid
+                          {isPaid ? "Paid" : "Pay"}
                         </button>
                       </td>
                     </tr>

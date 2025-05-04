@@ -29,22 +29,23 @@ export default function FreelancerPayments() {
   useEffect(() => {
     const fetchPayments = async () => {
       const query = `
-        query {
-          getFreelancerPayments(freelancerId: "${freelancerId}") {
-            payment_id
-            invoice_number
-            amount
-            payment_status
-            payment_date_completed
-            client_id {
-              user_id {
-                first_name
-                last_name
-              }
+      query {
+        getFreelancerPayments(freelancerId: "${freelancerId}") {
+          _id
+          invoice_number
+          amount
+          payment_status
+          payment_date_completed
+          client_id {
+            user_id {
+              first_name
+              last_name
             }
           }
         }
-      `;
+      }
+    `;
+
 
       const res = await fetch("http://localhost:4000/graphql", {
         method: "POST",
@@ -54,6 +55,7 @@ export default function FreelancerPayments() {
 
       const json = await res.json();
       setPayments(json?.data?.getFreelancerPayments || []);
+      console.log("Fetched freelancer payments:", json?.data?.getFreelancerPayments);
     };
 
     if (freelancerId) fetchPayments();
@@ -63,7 +65,7 @@ export default function FreelancerPayments() {
     const mutation = `
       mutation {
         markPaymentAsPaid(paymentId: "${paymentId}") {
-          payment_id
+          _id
           payment_status
           payment_date_completed
         }
@@ -82,7 +84,7 @@ export default function FreelancerPayments() {
     if (updated) {
       setPayments((prev) =>
         prev.map((p) =>
-          p.payment_id === updated.payment_id
+          p._id === updated._id
             ? {
                 ...p,
                 payment_status: updated.payment_status,
@@ -153,7 +155,7 @@ export default function FreelancerPayments() {
                   : "N/A";
 
                 return (
-                  <tr key={payment.payment_id || index}>
+                  <tr key={payment._id || index}>
                     <td><input type="checkbox" /></td>
                     <td>{payment.invoice_number}</td>
                     <td>{clientName}</td>
@@ -168,7 +170,7 @@ export default function FreelancerPayments() {
                       <button
                         className={`btn-request ${isPaid ? "disabled" : ""}`}
                         disabled={isPaid}
-                        onClick={() => handleMarkReceived(payment.payment_id)}
+                        onClick={() => handleMarkReceived(payment._id)}
                       >
                         Received
                       </button>
