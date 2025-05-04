@@ -169,6 +169,7 @@ type Bid {
     updateFreelancerProfile(input: UpdateFreelancerInput!): Freelancer!
     submitBid(bidInput: BidInput!): Bid!
     cancelBid(bidId: ID!): Boolean!
+    acceptBid(bidId: ID!, projectId: ID!): Boolean!
 
   }
 
@@ -181,6 +182,7 @@ type Bid {
     getFreelancerByUserId(userId: ID!): Freelancer
     getAllProjects: [Project!]!
     getBidsByFreelancerId(freelancerId: ID!): [Bid!]!
+    getBidsByProjectId(projectId: ID!): [Bid!]!
   }
 `);
 

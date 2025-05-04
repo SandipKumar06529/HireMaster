@@ -1,17 +1,22 @@
 import React, { useState } from "react";
 import "./BidModal.css";
 
-export default function BidModal({ onClose, projectTitle, projectId }) {
+export default function BidModal({ onClose, projectTitle, projectId, projectBudget, freelancerId }) {
   const [proposal, setProposal] = useState("");
   const [amount, setAmount] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const freelancerId = localStorage.getItem("freelancerId"); // 👈 (make sure you store freelancerId after login)
+    setError("");
 
     if (!freelancerId) {
       alert("Session expired. Please login again.");
+      return;
+    }
+
+    if (!amount || parseFloat(amount) >= parseFloat(projectBudget)) {
+      setError(`Bid amount must be less than the project budget ($${projectBudget}).`);
       return;
     }
 
@@ -38,11 +43,9 @@ export default function BidModal({ onClose, projectTitle, projectId }) {
       });
 
       const json = await res.json();
-      console.log("Submitted Bid:", json);
-
       if (json.data?.submitBid) {
         alert("Bid placed successfully!");
-        onClose(); // Close modal after success
+        onClose();
       } else {
         alert("Failed to submit bid.");
       }
@@ -56,7 +59,7 @@ export default function BidModal({ onClose, projectTitle, projectId }) {
     <div className="modal-backdrop">
       <div className="modal-box">
         <div className="modal-header">
-          <h2>{projectTitle}</h2> {/* Dynamic project title here */}
+          <h2>{projectTitle}</h2>
           <button className="close-btn" onClick={onClose}>✖</button>
         </div>
 
@@ -68,13 +71,16 @@ export default function BidModal({ onClose, projectTitle, projectId }) {
             required
           />
 
-          <label>Amount</label>
+          <label>Amount (must be less than ${projectBudget})</label>
           <input
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             required
+            min="0"
           />
+
+          {error && <p className="error-text">{error}</p>}
 
           <div className="modal-actions">
             <button type="button" className="cancel-btn" onClick={onClose}>Cancel</button>

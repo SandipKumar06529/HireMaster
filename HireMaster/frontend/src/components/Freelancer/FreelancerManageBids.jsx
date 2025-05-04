@@ -86,19 +86,20 @@ export default function FreelancerManageBids() {
     }
   }
 `;
-const variables = { freelancerId };
+    const variables = { freelancerId };
     try {
       const res = await fetch("http://localhost:4000/graphql", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query, variables}),
+        body: JSON.stringify({ query, variables }),
       });
 
       const json = await res.json();
       if (json.data?.getBidsByFreelancerId) {
         setBids(json.data.getBidsByFreelancerId.filter(bid => bid.bid_status === "Pending"));
-      }else {
-        console.error("GraphQL returned errors:", json.errors);}
+      } else {
+        console.error("GraphQL returned errors:", json.errors);
+      }
     } catch (err) {
       console.error("Error fetching bids:", err);
     }
@@ -163,7 +164,12 @@ const variables = { freelancerId };
                 <div className="bid-summary">
                   <h3>{bid.project_id?.title}</h3>
                   <p>💰 <strong>Budget:</strong> ${bid.project_id?.budget}</p>
-                  <p>📅 <strong>Posted:</strong> {new Date(bid.project_id?.createdAt).toLocaleDateString("en-US")}</p>
+                  <p>
+                    📅 <strong>Posted:</strong>{" "}
+                    {bid.project_id?.createdAt
+                      ? new Date(Number(bid.project_id.createdAt)).toLocaleDateString("en-US")
+                      : "N/A"}
+                  </p>
                   <button className="btn-read-more" onClick={() => toggleExpand(index)}>
                     {expandedIndex === index ? "Hide Details" : "Read More"}
                   </button>

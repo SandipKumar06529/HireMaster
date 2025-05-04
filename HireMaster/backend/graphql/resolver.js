@@ -269,9 +269,25 @@ const root = {
     await Bid.findByIdAndDelete(bidId);
     return true;
   },
+  acceptBid: async ({ bidId, projectId }) => {
+    // Accept selected bid
+    const selectedBid = await Bid.findById(bidId);
+    if (!selectedBid) throw new Error("Bid not found");
   
+    selectedBid.bid_status = "Accepted";
+    await selectedBid.save();
   
+    // Reject all other bids for the same project
+    await Bid.updateMany(
+      { project_id: projectId, _id: { $ne: bidId } },
+      { $set: { bid_status: "Rejected" } }
+    );
   
+    return true;
+  },  
+  getBidsByProjectId: async ({ projectId }) => {
+    return await Bid.find({ project_id: projectId }).populate("freelancer_id");
+  },
   
   
 
