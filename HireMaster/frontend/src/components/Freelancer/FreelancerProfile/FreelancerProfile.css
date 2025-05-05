@@ -54,6 +54,9 @@
   margin-bottom: 2rem;
   background-color: white;
   padding-right: 1rem;
+  margin-right: 1rem;
+  margin-left: 1rem;
+  border-radius: 6px;
 }
 
 .profile-info {
@@ -61,14 +64,20 @@
   align-items: center;
   padding-left: 1rem;
   gap: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .avatar {
-  width: 60px;
-  height: 60px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
   object-fit: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 
 .edit-btn {
   background-color: #4f46e5;
@@ -84,6 +93,8 @@
   background-color: white;
   padding: 2rem;
   border-radius: 0.75rem;
+  margin-right: 1rem;
+  margin-left: 1rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
@@ -219,4 +230,16 @@
   color: #1f2937;
   /* slate-800 text */
   font-size: 0.85rem;
+}
+
+.footer-text {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 2rem;
+}
+
+.footer-text span {
+  font-weight: bold;
+  color: #1f2937;
 }

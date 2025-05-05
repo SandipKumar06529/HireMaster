@@ -138,9 +138,9 @@ export default function FreelancerManageBids() {
                     <h2 className="fade-in">Manage Bids</h2>
 
                     <div className="header-actions">
-                        <div className="notification-wrapper" ref={notificationRef}>
+                        {/* <div className="notification-wrapper" ref={notificationRef}>
                             <span className="notification" onClick={toggleNotifications}>🔔<sup>3</sup></span>
-                        </div>
+                        </div> */}
 
                         <div className="profile-wrapper" ref={menuRef}>
                             <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
@@ -185,7 +185,12 @@ export default function FreelancerManageBids() {
                         ))}
                     </div>
                 )}
+                <footer className="footer-text">
+                    <span>HM</span> © 2025 All Rights Reserved to HireMaster | Version 0.1
+                </footer>
             </main>
+
         </div>
+
     );
 }

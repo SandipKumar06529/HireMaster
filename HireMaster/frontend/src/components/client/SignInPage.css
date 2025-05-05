@@ -102,10 +102,16 @@
     width: 50%;
     padding: 4rem;
     color: white;
-    background: linear-gradient(to bottom right, #4f46e5, #7c3aed);
+    /* background: linear-gradient(to bottom right, #4f46e5, #7c3aed); */
+    background: url(../../assets/Background_Sign_In.jpg) no-repeat  fixed;
+    background-size: cover;
+    background-position: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /* border-top-left-radius: 140px; */
+    /* border-bottom-left-radius: 140px; */
+
   }
   
   .signin-right h2 {

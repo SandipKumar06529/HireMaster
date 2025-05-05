@@ -195,6 +195,9 @@ export default function FreelancerProfile() {
             </div>
           </div>
         </form>
+        <footer className="footer-text">
+          <span>HM</span> © 2025 All Rights Reserved to HireMaster | Version 0.1
+        </footer>
       </main>
     </div>
   );

@@ -56,7 +56,21 @@
     padding-right: 1rem;
     padding-left: 1rem;
     border-radius: 0.5rem;
+    position: relative;
+    animation: slideDown 0.7s ease-in-out ;
   }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
   
   .header-actions {
     display: flex;
@@ -80,6 +94,8 @@
     padding: 2rem;
     border-radius: 0.75rem;
     margin-bottom: 2rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
   
   .welcome-section h1 {
@@ -95,14 +111,17 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
     margin-bottom: 2rem;
+    justify-content: space-between;
   }
   
   .stat-card {
     background-color: white;
     padding: 1rem;
     border-radius: 0.5rem;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
     text-align: center;
   }
   
@@ -131,13 +150,18 @@
     background-color: white;
     padding: 1rem;
     border-radius: 0.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);        
   }
-  
+
   .projects-header {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 1rem;
+    
   }
   
   .filters button {
@@ -162,8 +186,9 @@
   }
   
   .projects-table thead {
-    background-color: #f3f4f6;
+    background-color: #4f46e5;
     text-align: left;
+    color: white;
   }
   
   .projects-table th,
@@ -185,6 +210,7 @@
   .status.active {
     background-color: #10b981;
     color: white;
+    padding: 4px 19px 4px 19px;
   }
   
   .status.inactive {
@@ -196,3 +222,15 @@
     cursor: pointer;
   }
   
+  .footer-text {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-text span {
+    font-weight: bold;
+    color: #1f2937;
+  }

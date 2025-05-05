@@ -123,7 +123,7 @@ export default function FreelancerProjects() {
         <header className="top-navbar">
           <h2>Projects</h2>
           <div className="header-actions">
-            
+
             <div className="profile-wrapper" ref={menuRef}>
               <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
               {showMenu && (
@@ -136,7 +136,7 @@ export default function FreelancerProjects() {
           </div>
         </header>
 
-        
+
 
         <div className="project-list">
           {projects.length > 0 ? (
@@ -176,9 +176,8 @@ export default function FreelancerProjects() {
           )}
         </div>
 
-        <footer className="dashboard-footer">
-          <span>HM</span>
-          <p>© 2025 All Rights Reserved to HireMaster | Version 0.1</p>
+        <footer className="footer-text">
+          <span>HM</span> © 2025 All Rights Reserved to HireMaster | Version 0.1
         </footer>
 
         {isDialogOpen && (

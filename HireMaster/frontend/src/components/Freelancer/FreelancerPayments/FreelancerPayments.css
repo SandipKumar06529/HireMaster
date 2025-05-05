@@ -1,21 +1,22 @@
 .freelancer-payments-container {
   padding: 0rem;
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f9fafb;
+  background-color: #f5f5f5  ;
   min-height: 100vh;
 }
+
 /* download button and text */
 .payments-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 1rem;
-  }
-  
-  .payments-header h2 {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem;
+}
+
+.payments-header h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
 
 /* nav bar */
 .top-navbar {
@@ -32,6 +33,19 @@
   font-size: 1.5rem;
   font-weight: bold;
   padding-left: 1rem;
+  animation: slideDown 0.7s ease-in-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .header-actions {
@@ -54,6 +68,7 @@
   font-size: 1.4rem;
   cursor: pointer;
 }
+
 /*  */
 
 .btn-download {
@@ -64,7 +79,7 @@
   font-size: 0.875rem;
   cursor: pointer;
   font-weight: 500;
-  
+
 }
 
 .title {
@@ -74,16 +89,27 @@
   display: flex-end;
 }
 
+.table-payments {
+  display: flex;
+  gap: 1rem;
+  flex-direction: row;
+}
+
 .payments-table {
   width: 100%;
   border-collapse: collapse;
   background-color: white;
   border-radius: 8px;
   overflow: hidden;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  
 }
-
+/* 4b5563 */
 .payments-table thead {
-  background-color: #f3f4f6;
+  background-color: #4f46e5;
+  color: white;
   text-align: left;
 }
 
@@ -92,6 +118,14 @@
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
   border-bottom: 1px solid #e5e7eb;
+  
+}
+
+input[type='checkbox'] {
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+  accent-color: #4f46e5;
 }
 
 .status {

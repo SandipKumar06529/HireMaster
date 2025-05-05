@@ -114,7 +114,7 @@ export default function FreelancerPayments() {
           <header className="top-navbar">
             <h2>Payments</h2>
             <div className="header-actions">
-              <span className="notification">🔔<sup>2</sup></span>
+              {/* <span className="notification">🔔<sup>2</sup></span> */}
               <div className="profile-wrapper" ref={menuRef}>
                 <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
                 {showMenu && (
@@ -132,55 +132,62 @@ export default function FreelancerPayments() {
             <button className="btn-download">⬇ Download PDF Report</button>
           </header> */}
 
-          <table className="payments-table">
-            <thead>
-              <tr>
-                <th>PDF</th>
-                <th>INVOICE NUMBER</th>
-                <th>CLIENT</th>
-                <th>PAYMENT DATE</th>
-                <th>STATUS</th>
-                <th>AMOUNT</th>
-                <th>RECEIVED</th>
-              </tr>
-            </thead>
-            <tbody>
-              {payments.map((payment, index) => {
-                const isPaid = payment.payment_status === "paid";
-                const paymentDate = payment.payment_date_completed
-                  ? new Date(Number(payment.payment_date_completed)).toLocaleDateString("en-US")
-                  : "-";
-                const clientName = payment.client_id?.user_id
-                  ? `${payment.client_id.user_id.first_name} ${payment.client_id.user_id.last_name}`
-                  : "N/A";
+          <div className="table-payments">
 
 
-                return (
-                  <tr key={payment._id || index}>
-                    <td><input type="checkbox" /></td>
-                    <td>{payment.invoice_number}</td>
-                    <td>{clientName}</td>
-                    <td>{paymentDate}</td>
-                    <td>
-                      <span className={`status ${payment.payment_status}`}>
-                        {payment.payment_status.toUpperCase()}
-                      </span>
-                    </td>
-                    <td>${payment.amount}</td>
-                    <td>
-                      <button
-                        className={`btn-request ${isPaid ? "disabled" : ""}`}
-                        disabled={isPaid}
-                        onClick={() => handleMarkReceived(payment._id)}
-                      >
-                        Received
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+
+
+
+            <table className="payments-table">
+              <thead>
+                <tr>
+                  <th>PDF</th>
+                  <th>INVOICE NUMBER</th>
+                  <th>CLIENT</th>
+                  <th>PAYMENT DATE</th>
+                  <th>STATUS</th>
+                  <th>AMOUNT</th>
+                  <th>RECEIVED</th>
+                </tr>
+              </thead>
+              <tbody>
+                {payments.map((payment, index) => {
+                  const isPaid = payment.payment_status === "paid";
+                  const paymentDate = payment.payment_date_completed
+                    ? new Date(Number(payment.payment_date_completed)).toLocaleDateString("en-US")
+                    : "-";
+                  const clientName = payment.client_id?.user_id
+                    ? `${payment.client_id.user_id.first_name} ${payment.client_id.user_id.last_name}`
+                    : "N/A";
+
+
+                  return (
+                    <tr key={payment._id || index}>
+                      <td><input type="checkbox" id="checkbox" /></td>
+                      <td>{payment.invoice_number}</td>
+                      <td>{clientName}</td>
+                      <td>{paymentDate}</td>
+                      <td>
+                        <span className={`status ${payment.payment_status}`}>
+                          {payment.payment_status.toUpperCase()}
+                        </span>
+                      </td>
+                      <td>${payment.amount}</td>
+                      <td>
+                        <button
+                          className={`btn-request ${isPaid ? "disabled" : ""}`}
+                          disabled={isPaid}
+                          onClick={() => handleMarkReceived(payment._id)}
+                        >
+                          Received
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
 
           <footer className="footer-text">
             <span>HM</span> © 2025 All Rights Reserved to HireMaster | Version 0.1

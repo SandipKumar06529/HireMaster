@@ -72,7 +72,7 @@ export default function EditFreelancerProfile() {
 
       const json = await res.json();
       console.log("GraphQL response:", json);
-      
+
       if (json?.data?.getFreelancerByUserId) {
         setForm(prev => ({
           ...prev,
@@ -169,6 +169,7 @@ export default function EditFreelancerProfile() {
           <Link to="/freelancer-dashboard" className="menu-item">Dashboard</Link>
           <Link to="/freelancer-projects" className="menu-item">Projects</Link>
           <Link to="/freelancer-payments" className="menu-item">Payments</Link>
+          <Link to="/freelancer-bids" className="menu-item">Manage Bids</Link>
           <Link to="/freelancer-profile" className="menu-item active">Profile</Link>
         </nav>
       </aside>
@@ -293,6 +294,9 @@ export default function EditFreelancerProfile() {
             <button type="submit" className="save-btn">Save</button>
           </div>
         </form>
+        <footer className="footer-text">
+          <span>HM</span> © 2025 All Rights Reserved to HireMaster | Version 0.1
+        </footer>
       </main>
     </div>
   );

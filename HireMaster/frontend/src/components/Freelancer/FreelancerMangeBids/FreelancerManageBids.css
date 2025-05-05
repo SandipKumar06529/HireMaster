@@ -1,4 +1,5 @@
 css
+
 /* Container */
 .dashboard-container {
   display: flex;
@@ -48,7 +49,8 @@ css
 /* Main */
 .dashboard-main {
   flex-grow: 1;
-  padding: 2rem;
+  padding: 0rem;
+  background-color: #f5f5f5;
   overflow-y: auto;
 }
 
@@ -116,6 +118,7 @@ css
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -194,10 +197,13 @@ css
 /* Bid Card */
 .bid-card {
   background: white;
-  padding: 1.75rem;
+  padding: 1rem  1.75rem 1.75rem 1.75rem;
   border-radius: 1rem;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-bottom: 5px solid #4f46e5;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .bid-card:hover {
@@ -208,8 +214,9 @@ css
 .bid-summary h3 {
   font-size: 1.5rem;
   font-weight: 700;
+  margin-top: 0;
   margin-bottom: 0.5rem;
-  color: #0f172a;
+  color: #1e3a8a;
 }
 
 .bid-summary p {
@@ -239,7 +246,7 @@ css
 /* Bid Details */
 .bid-details {
   margin-top: 1.2rem;
-  background: #f8fafc;
+  background: #f4f4f5;
   padding: 1.25rem;
   border-radius: 0.75rem;
 }
@@ -278,8 +285,22 @@ css
     opacity: 0;
     transform: translateY(-10px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.footer-text {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.footer-text span {
+  font-weight: bold;
+  color: #1f2937;
 }

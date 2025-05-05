@@ -56,9 +56,10 @@
   
   .dashboard-main {
     flex-grow: 1;
-    background-color: #f9fafb;
-    padding: 2rem;
+    background-color: #f5f5f5;
+    padding: 0;
     overflow-y: auto;
+    margin-top: 0;
   }
   
   /* .projects-header h2 {
@@ -72,15 +73,30 @@
     background-color: white;
     justify-content: space-between;
     align-items: center;
-    margin-top: 0rem;
+    margin-top: 0;
     margin-bottom: 2rem;
     padding-right: 1rem;
+    
+    
   }
+
+  
   
   .top-navbar h2 {
     font-size: 1.5rem;
     font-weight: bold;
     padding-left: 1rem;
+    animation: slideDown 0.7s ease-in-out ;
+  }
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   
   .header-actions {
@@ -118,10 +134,12 @@
   
   .project-card {
     background-color: white;
+    margin-left: 1rem;
+    margin-right: 1rem;
     padding: 1.5rem;
     border-radius: 0.75rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    border-left: 5px solid #4f46e5;
+    border-bottom: 5px solid #4f46e5;
   }
   
   .project-title {
@@ -181,4 +199,17 @@
 
   .btn-delete-Project:hover{
     background-color: #c23e34;
+  }
+
+  .footer-text {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-text span {
+    font-weight: bold;
+    color: #1f2937;
   }
