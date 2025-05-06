@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./ClientProjects.css";
+import { assets } from "../../../assets/assets";
 
 export default function ClientProjects() {
   const navigate = useNavigate();
@@ -116,7 +117,7 @@ export default function ClientProjects() {
 
         </header>
 
-        <section className="projects-section">
+        <section className="projects-lists">
           {/* <h3>View, post, and manage your Projects here!</h3> */}
 
           {projects.length === 0 ? (
@@ -149,9 +150,8 @@ export default function ClientProjects() {
           )}
         </section>
 
-        <footer className="dashboard-footer">
-          <span>HM</span>
-          <p>© 2025 All Rights Reserved to HireMaster | Version 0.1</p>
+        <footer className="footer-text">
+          <span><img src={assets.Logo_3} alt="Logo" width='15px' /></span> © 2025 All Rights Reserved to HireMaster | Version 0.1
         </footer>
 
         {showModal && (

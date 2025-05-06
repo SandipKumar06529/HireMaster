@@ -64,15 +64,17 @@
   .project-full-card {
     background-color: white;
     padding: 2rem;
+    margin: 0 1rem;
     border-radius: 0.5rem;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
   }
   
   .project-full-card h4 {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 700;
     color: #1f2937;
     margin-bottom: 1rem;
+    margin-top: 0;
   }
   
   .project-meta {
@@ -90,7 +92,7 @@
   }
   
   .project-full-card h5 {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: #111827;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;

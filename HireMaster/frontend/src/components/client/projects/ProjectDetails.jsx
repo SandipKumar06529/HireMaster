@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./ProjectDetails.css";
-
+import { assets } from "../../../assets/assets";
 
 export default function ProjectDetails() {
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ export default function ProjectDetails() {
         </header>
 
         <section className="project-details-section">
-          <h3>View, Bid and manage your Projects here!</h3>
+          {/* <h3>View, Bid and manage your Projects here!</h3> */}
 
           <div className="project-full-card">
             <h4>{project.title}</h4>
@@ -74,22 +74,22 @@ export default function ProjectDetails() {
 
             </div>
             <p>
-            {project.description}
+              {project.description}
             </p>
 
             <h5>Key Responsibilities:</h5>
             <ul>
-            {project.responsibilities}
+              {project.responsibilities}
             </ul>
 
             <h5>Required Skills & Qualifications:</h5>
             <ul>
-            {project.requiredSkills}
+              {project.requiredSkills}
             </ul>
 
             <h5>Preferred Qualifications:</h5>
             <ul>
-            {project.preferredSkills}
+              {project.preferredSkills}
             </ul>
 
             <h5>Why Join Us?</h5>
@@ -101,11 +101,14 @@ export default function ProjectDetails() {
             </ul>
 
             <div className="details-buttons">
-              <button className="btn-bid" onClick={()=> navigate(`/projects/${projectId}/bids`)} >Bids</button>
+              <button className="btn-bid" onClick={() => navigate(`/projects/${projectId}/bids`)} >Bids</button>
               <button className="btn-cancel" onClick={() => navigate("/projects")}>Cancel</button>
             </div>
           </div>
         </section>
+        <footer className="footer-text">
+          <span><img src={assets.Logo_3} alt="Logo" width='15px' /></span> © 2025 All Rights Reserved to HireMaster | Version 0.1
+        </footer>
       </main>
     </div>
   );

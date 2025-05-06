@@ -126,7 +126,7 @@
   }
   
   .stat-card h3 {
-    font-size: 0.875rem;
+    font-size: 1.25rem;
     color: #6b7280;
     margin-bottom: 0.5rem;
   }
@@ -162,22 +162,6 @@
     align-items: center;
     margin-bottom: 1rem;
     
-  }
-  
-  .filters button {
-    background: none;
-    border: none;
-    padding: 0.5rem 1rem;
-    margin-left: 0.5rem;
-    font-weight: 500;
-    border-radius: 999px;
-    color: #4b5563;
-    cursor: pointer;
-  }
-  
-  .filters .active {
-    background-color: #111827;
-    color: white;
   }
   
   .projects-table {

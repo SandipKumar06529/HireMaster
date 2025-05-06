@@ -52,6 +52,24 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  background-color: white;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  border-radius: 0.5rem;
+  position: relative;
+  animation: slideDown 0.7s ease-in-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .header-actions {
@@ -100,7 +118,8 @@
 .welcome-section {
   position: relative;
   width: auto;
-  height: 190px; /* Adjust as needed */
+  height: 190px;
+  /* Adjust as needed */
   border-radius: 0.75rem;
   overflow: hidden;
   margin-bottom: 2rem;
@@ -116,7 +135,7 @@
   height: 100%;
   object-fit: cover;
   opacity: 0.7;
-  
+
   z-index: 1;
 }
 
@@ -152,6 +171,7 @@
   object-fit: contain;
   z-index: 2;
 }
+
 /*  */
 
 
@@ -172,7 +192,7 @@
 }
 
 .stat-card h3 {
-  font-size: 0.875rem;
+  font-size: 1.25rem;
   color: #6b7280;
   margin-bottom: 0.5rem;
 }
@@ -194,6 +214,7 @@
   background-color: white;
   padding: 1rem;
   border-radius: 0.5rem;
+  margin: 0 1rem;
 }
 
 .posts-header {
@@ -201,22 +222,8 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 1rem;
-}
 
-.filters button {
-  background: none;
-  border: none;
-  padding: 0.5rem 1rem;
-  margin-left: 0.5rem;
-  font-weight: 500;
-  border-radius: 999px;
-  color: #4b5563;
-  cursor: pointer;
-}
 
-.filters .active {
-  background-color: #111827;
-  color: white;
 }
 
 .posts-table {
@@ -225,7 +232,8 @@
 }
 
 .posts-table thead {
-  background-color: #f3f4f6;
+  background-color: #4f46e5;
+  color: white;
   text-align: left;
 }
 
@@ -242,11 +250,13 @@
   font-size: 0.75rem;
   font-weight: 600;
   text-align: center;
+  display: inline-block;
 }
 
 .status.active {
   background-color: #10b981;
   color: white;
+  padding: 4px 19px 4px 19px;
 }
 
 .status.inactive {
@@ -267,7 +277,7 @@
   right: 0;
   top: 2.5rem;
   background-color: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
   padding: 0.5rem 0;
   display: flex;
@@ -292,4 +302,17 @@
 
 .avatar {
   cursor: pointer;
+}
+
+.footer-text {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.footer-text span {
+  font-weight: bold;
+  color: #1f2937;
 }

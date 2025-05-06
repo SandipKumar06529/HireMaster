@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./FreelancerProfile.css";
 import FreelancerRating from "../FreelancerRating/FreelancerRating"; // adjust path if needed
-
+import { assets } from "../../../assets/assets"; // adjust path if needed
 
 export default function FreelancerProfile() {
   const navigate = useNavigate();
@@ -196,7 +196,7 @@ export default function FreelancerProfile() {
           </div>
         </form>
         <footer className="footer-text">
-          <span>HM</span> © 2025 All Rights Reserved to HireMaster | Version 0.1
+          <span><img src={assets.Logo_3} alt="Logo" width='15px'/></span> © 2025 All Rights Reserved to HireMaster | Version 0.1
         </footer>
       </main>
     </div>
