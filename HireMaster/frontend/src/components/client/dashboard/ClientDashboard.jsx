@@ -3,19 +3,20 @@ import { Link, useNavigate } from "react-router-dom";
 import "./ClientDashboard.css";
 import { assets } from "../../../assets/assets";
 
-
 export default function ClientDashboard() {
-
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
 
+  const [clientStats, setClientStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const toggleMenu = () => setShowMenu(!showMenu);
+
   const handleLogout = () => {
     alert("Logging out...");
-    localStorage.removeItem('token');  // Clear token
-    navigate('/');               // Redirect
-    // logout logic
+    localStorage.removeItem("token");
+    navigate("/");
   };
 
   useEffect(() => {
@@ -28,6 +29,52 @@ export default function ClientDashboard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const fetchDashboardStats = async () => {
+      const clientId = localStorage.getItem("clientId");
+      if (!clientId) return;
+
+      const query = `
+        query GetClientStats($clientId: ID!) {
+          getClientDashboardStats(clientId: $clientId) {
+            clientName
+            totalProjectsPosted
+            totalBidsReceived
+            totalActiveProjects
+            totalPaymentsMade
+            projects {
+              title
+              freelancerName
+              bidAmount
+              status
+            }
+          }
+        }
+      `;
+
+      try {
+        const response = await fetch("http://localhost:4000/graphql", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            query,
+            variables: { clientId },
+          }),
+        });
+
+        const result = await response.json();
+        setClientStats(result.data.getClientDashboardStats);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching dashboard stats:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardStats();
+  }, []);
 
   return (
     <div className="dashboard-container">
@@ -55,17 +102,15 @@ export default function ClientDashboard() {
                 </div>
               )}
             </div>
-            
           </div>
         </header>
 
         <section className="welcome-section">
           <img src={assets.Background_dashboard} alt="background" className="background-img" />
-
           <div className="welcome-content">
             <div className="text-content">
               <h1>Welcome To HireMaster</h1>
-              <h2>John Doe</h2>
+              <h2>{clientStats?.clientName || "Client"}</h2>
             </div>
             <img src={assets.dashboard_image} alt="illustration" className="foreground-img" />
           </div>
@@ -74,34 +119,25 @@ export default function ClientDashboard() {
         <section className="stats-section">
           <div className="stat-card">
             <h3>Project Posts</h3>
-            <p className="stat-number">2,456</p>
-            <p className="stat-positive">+2.5%</p>
+            <p className="stat-number">{clientStats?.totalProjectsPosted ?? "--"}</p>
           </div>
           <div className="stat-card">
             <h3>Total Bids Received</h3>
-            <p className="stat-number">4,561</p>
-            <p className="stat-negative">-4.4%</p>
+            <p className="stat-number">{clientStats?.totalBidsReceived ?? "--"}</p>
           </div>
           <div className="stat-card">
             <h3>No of Active Projects</h3>
-            <p className="stat-number">125</p>
-            <p className="stat-positive">+1.5%</p>
+            <p className="stat-number">{clientStats?.totalActiveProjects ?? "--"}</p>
           </div>
           <div className="stat-card">
             <h3>No of Payments</h3>
-            <p className="stat-number">2,456</p>
-            <p className="stat-positive">+4.5%</p>
+            <p className="stat-number">{clientStats?.totalPaymentsMade ?? "--"}</p>
           </div>
         </section>
 
         <section className="posts-section">
           <div className="posts-header">
             <h3>Recent Posts</h3>
-            {/* <div className="filters">
-              <button>Monthly</button>
-              <button>Weekly</button>
-              <button className="active">Today</button>
-            </div> */}
           </div>
 
           <table className="posts-table">
@@ -114,40 +150,28 @@ export default function ClientDashboard() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>UI UX Designer</td>
-                <td>Alice Johnson</td>
-                <td>$3,500</td>
-                <td><span className="status active">Active</span></td>
-              </tr>
-              <tr>
-                <td>Full Stack Dev</td>
-                <td>Brian Lee</td>
-                <td>$4,000</td>
-                <td><span className="status inactive">Inactive</span></td>
-              </tr>
-              <tr>
-                <td>DevOps</td>
-                <td>Catherine Singh</td>
-                <td>$3,800</td>
-                <td><span className="status active">Active</span></td>
-              </tr>
-              <tr>
-                <td>Android Dev</td>
-                <td>Elias Carter</td>
-                <td>$4,500</td>
-                <td><span className="status active">Active</span></td>
-              </tr>
-              <tr>
-                <td>IOS Developer</td>
-                <td>Rowan Preston</td>
-                <td>$4,000</td>
-                <td><span className="status inactive">Inactive</span></td>
-              </tr>
+              {loading ? (
+                <tr><td colSpan="4">Loading projects...</td></tr>
+              ) : clientStats?.projects?.length > 0 ? (
+                clientStats.projects.map((project, index) => (
+                  <tr key={index}>
+                    <td>{project.title}</td>
+                    <td>{project.freelancerName}</td>
+                    <td>${project.bidAmount}</td>
+                    <td>
+                      <span className={`status ${project.status.toLowerCase()}`}>
+                        {project.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr><td colSpan="4">No projects found.</td></tr>
+              )}
             </tbody>
           </table>
         </section>
       </main>
     </div>
   );
-} 
+}

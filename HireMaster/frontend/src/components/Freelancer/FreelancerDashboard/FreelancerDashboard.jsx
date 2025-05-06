@@ -4,9 +4,14 @@ import "./FreelancerDashboard.css";
 import { assets } from "../../../assets/assets";
 
 export default function FreelancerDashboard() {
+  const [dashboardStats, setDashboardStats] = useState(null);
+  const freelancerId = localStorage.getItem("freelancerId");
+
   const [showNotifications, setShowNotifications] = useState(false);
   const [readNotifications, setReadNotifications] = useState([]);
   const notificationRef = useRef(null);
+  const menuRef = useRef(null);
+  const navigate = useNavigate();
 
   const notifications = [
     { text: "Your bid on 'Stock Market Tracking App' has been accepted! 🎉", type: "accepted" },
@@ -17,10 +22,16 @@ export default function FreelancerDashboard() {
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
     if (!showNotifications) {
-      setTimeout(() => {
-        setShowNotifications(false);
-      }, 5000); // Auto-hide after 5 sec
+      setTimeout(() => setShowNotifications(false), 5000);
     }
+  };
+
+  const toggleMenu = () => setShowMenu(!showMenu);
+  const [showMenu, setShowMenu] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
   };
 
   const markAsRead = (index) => {
@@ -42,40 +53,40 @@ export default function FreelancerDashboard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
-
-  // Sample data for projects
-  const projects = [
-    { title: "AI Chatbot UI", client: "Yuhua Cao", bid: 6000, status: "Active" },
-    { title: "Expense Tracking Web App", client: "Brian Imohe", bid: 15000, status: "Inactive" },
-    { title: "Serverless API Deployment", client: "Yuhua Cao", bid: 18000, status: "Active" },
-    { title: "Fitness App", client: "Jade Walters", bid: 12000, status: "Active" },
-    { title: "Movie Recommendation App", client: "John Patrick", bid: 14000, status: "Inactive" }
-  ];
-
-
-  // log out logic
-  const navigate = useNavigate();
-  const [showMenu, setShowMenu] = useState(false);
-  const menuRef = useRef(null);
-
-  const toggleMenu = () => setShowMenu(!showMenu);
-  const handleLogout = () => {
-    alert("Logging out...");
-    localStorage.removeItem('token');  // Clear token
-    navigate('/');               // Redirect
-    // logout logic
-  };
-
+  // ✅ Fetch freelancer dashboard stats
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setShowMenu(false);
+    if (!freelancerId) return;
+
+    const query = `
+      query {
+        getFreelancerDashboardStats(freelancerId: "${freelancerId}") {
+          freelancerName
+          totalBidsAccepted
+          totalClientsWorkedWith
+          totalActiveProjects
+          totalPaymentsReceived
+          projects {
+            title
+            clientName
+            bidAmount
+            status
+          }
+        }
       }
+    `;
+
+    const fetchStats = async () => {
+      const res = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+      const json = await res.json();
+      setDashboardStats(json?.data?.getFreelancerDashboardStats || null);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+
+    fetchStats();
+  }, [freelancerId]);
 
 
   return (
@@ -136,7 +147,7 @@ export default function FreelancerDashboard() {
           <div className="welcome-content">
             <div className="text-content">
               <h1>Welcome To HireMaster</h1>
-              <h2>Amy Wong</h2>
+              <h2>{dashboardStats?.freelancerName || "Freelancer"}</h2>
             </div>
             <img src={assets.dashboard_image} alt="illustration" className="foreground-img" />
           </div>
@@ -145,23 +156,19 @@ export default function FreelancerDashboard() {
         <section className="stats-section">
           <div className="stat-card">
             <h3>Total Bids Accepted</h3>
-            <p className="stat-number">2,456</p>
-            <p className="stat-positive">+2.5%</p>
+            <p className="stat-number">{dashboardStats?.totalBidsAccepted ?? 0}</p>
           </div>
           <div className="stat-card">
             <h3>No of Clients</h3>
-            <p className="stat-number">4,561</p>
-            <p className="stat-negative">-4.4%</p>
+            <p className="stat-number">{dashboardStats?.totalClientsWorkedWith ?? 0}</p>
           </div>
           <div className="stat-card">
             <h3>No of Active projects</h3>
-            <p className="stat-number">125</p>
-            <p className="stat-positive">+1.5%</p>
+            <p className="stat-number">{dashboardStats?.totalActiveProjects ?? 0}</p>
           </div>
           <div className="stat-card">
             <h3>No of Payment</h3>
-            <p className="stat-number">2,456</p>
-            <p className="stat-positive">+4.5%</p>
+            <p className="stat-number">{dashboardStats?.totalPaymentsReceived ?? 0}</p>
           </div>
         </section>
 
@@ -186,18 +193,22 @@ export default function FreelancerDashboard() {
               </tr>
             </thead>
             <tbody>
-              {projects.map((project, index) => (
-                <tr key={index}>
-                  <td>{project.title}</td>
-                  <td>{project.client}</td>
-                  <td>{project.bid}</td>
-                  <td>
-                    <span className={`status ${project.status.toLowerCase()}`}>
-                      {project.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+              {dashboardStats?.projects?.length > 0 ? (
+                dashboardStats.projects.map((project, index) => (
+                  <tr key={index}>
+                    <td>{project.title}</td>
+                    <td>{project.clientName}</td>
+                    <td>{project.bidAmount}</td>
+                    <td>
+                      <span className={`status ${project.status.toLowerCase()}`}>
+                        {project.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr><td colSpan="4">No projects found.</td></tr>
+              )}
             </tbody>
           </table>
         </section>
