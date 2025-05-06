@@ -388,10 +388,93 @@ getFreelancerPayments: async ({ freelancerId }) => {
     populate: { path: 'user_id' }
   });
 },
+getFreelancerDashboardStats: async ({ freelancerId }) => {
+  const freelancer = await Freelancer.findById(freelancerId).populate("user_id");
+  if (!freelancer) throw new Error("Freelancer not found");
 
+  const fullName = `${freelancer.user_id.first_name} ${freelancer.user_id.last_name}`;
 
+  // Get accepted bids
+  const acceptedBids = await Bid.find({ freelancer_id: freelancerId, bid_status: "Accepted" }).populate("project_id");
+  const acceptedProjectIds = acceptedBids.map(bid => bid.project_id?._id?.toString()).filter(Boolean);
 
+  // Get related payments
+  const payments = await Payment.find({ freelancer_id: freelancerId }).populate({
+    path: "client_id",
+    populate: { path: "user_id" }
+  }).populate("project_id");
 
+  // Total clients (unique client IDs from accepted bids)
+  const clientSet = new Set();
+  payments.forEach(payment => {
+    if (payment.payment_status === "unpaid" || payment.payment_status === "paid") {
+      clientSet.add(payment.client_id._id.toString());
+    }
+  });
+
+  // Active projects: unpaid and accepted
+  const activeProjects = payments.filter(p => p.payment_status === "unpaid").length;
+
+  // Payments received: count of payments with status = paid
+  const paymentsReceived = payments.filter(p => p.payment_status === "paid").length;
+
+  // Build current projects list
+  const projects = payments.map(p => ({
+    title: p.project_id.title,
+    clientName: `${p.client_id?.user_id?.first_name || ''} ${p.client_id?.user_id?.last_name || ''}`.trim(),
+    bidAmount: p.amount,
+    status: p.payment_status === "paid" ? "Inactive" : "Active"
+  }));
+
+  return {
+    freelancerName: fullName,
+    totalBidsAccepted: acceptedBids.length,
+    totalClientsWorkedWith: clientSet.size,
+    totalActiveProjects: activeProjects,
+    totalPaymentsReceived: paymentsReceived,
+    projects
+  };
+},
+
+getClientDashboardStats: async ({ clientId }) => {
+  const client = await Client.findById(clientId).populate("user_id");
+  if (!client) throw new Error("Client not found");
+
+  const clientName = `${client.user_id.first_name} ${client.user_id.last_name}`;
+
+  // 1. Get all projects posted by the client
+  const projects = await Project.find({ client_id: clientId });
+
+  // 2. Count total bids received for these projects
+  const projectIds = projects.map(p => p._id);
+  const allBids = await Bid.find({ project_id: { $in: projectIds } });
+
+  // 3. Get all payments made by client
+  const payments = await Payment.find({ client_id: clientId }).populate({
+    path: "freelancer_id",
+    populate: { path: "user_id" }
+  }).populate("project_id");
+
+  const activeProjects = payments.filter(p => p.payment_status === "unpaid").length;
+  const totalPayments = payments.filter(p => p.payment_status === "paid").length;
+
+  // 4. Build recent projects list
+  const recentProjects = payments.map(p => ({
+    title: p.project_id.title,
+    freelancerName: `${p.freelancer_id?.user_id?.first_name || ""} ${p.freelancer_id?.user_id?.last_name || ""}`.trim(),
+    bidAmount: p.amount,
+    status: p.payment_status === "paid" ? "Inactive" : "Active"
+  }));
+
+  return {
+    clientName,
+    totalProjectsPosted: projects.length,
+    totalBidsReceived: allBids.length,
+    totalActiveProjects: activeProjects,
+    totalPaymentsMade: totalPayments,
+    projects: recentProjects
+  };
+},
 
   users: async () => await User.find(),
   clients: async () => await Client.find()

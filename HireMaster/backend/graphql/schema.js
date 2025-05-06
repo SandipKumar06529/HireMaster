@@ -166,9 +166,37 @@ type Bid {
   payment_date_completed: String
   invoice_number: String!  
 }
+type FreelancerDashboardStats {
+  freelancerName: String!
+  totalBidsAccepted: Int!
+  totalClientsWorkedWith: Int!
+  totalActiveProjects: Int!
+  totalPaymentsReceived: Int!
+  projects: [FreelancerProject!]!
+}
 
+type FreelancerProject {
+  title: String!
+  clientName: String!
+  bidAmount: Float!
+  status: String!
+}
 
+type ClientDashboardStats {
+  clientName: String!
+  totalProjectsPosted: Int!
+  totalBidsReceived: Int!
+  totalActiveProjects: Int!
+  totalPaymentsMade: Int!
+  projects: [ClientProject!]!
+}
 
+type ClientProject {
+  title: String!
+  freelancerName: String!
+  bidAmount: Float!
+  status: String!
+}
 
   type Mutation {
     createUser(userInput: UserInput): AuthData!
@@ -199,6 +227,9 @@ type Bid {
     getBidsByProjectId(projectId: ID!): [Bid!]!
     getClientPayments(clientId: ID!): [Payment]
     getFreelancerPayments(freelancerId: ID!): [Payment]
+    getFreelancerDashboardStats(freelancerId: ID!): FreelancerDashboardStats!
+    getClientDashboardStats(clientId: ID!): ClientDashboardStats!
+
   }
 `);
 
