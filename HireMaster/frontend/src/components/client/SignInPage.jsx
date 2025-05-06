@@ -97,9 +97,9 @@ export default function SignInPage() {
   return (
     <div className="signin-container">
       <div className="signin-left">
-        <div className="signup-header">
-          <div className="logo">
-            <img src={assets.Logo_3} alt="Logo"/>
+        <div className="signin-header">
+          <div className="SignIn-logo">
+            <img src={assets.Logo_3} alt="Logo" />
           </div>
         </div>
 
@@ -146,13 +146,13 @@ export default function SignInPage() {
             <div className="signup-buttons">
               <button
                 type="button"
-                className="btn-secondary"
+                className="btnn-secondary"
                 onClick={() => navigate("/signup/client")}
               >Client</button>
 
               <button
                 type="button"
-                className="btn-secondary"
+                className="btnn-secondary"
                 onClick={() => navigate("/freelancer-signup")}
               >Freelancer</button>
             </div>
@@ -161,15 +161,18 @@ export default function SignInPage() {
       </div>
 
       <div className="signin-right">
-        <h2>Start your freelancing journey with HireMaster.</h2>
-        <p>
-          Unlock opportunities and connect with clients seamlessly. Whether you’re a freelancer
-          looking for exciting projects or a client searching for top talent, HireMaster provides
-          the platform to make it happen.
-        </p>
-        <p>
-          Sign in to manage your projects, bids, and payments effortlessly.
-        </p>
+        <div className="signin-right-content">
+          <h2>Start your freelancing journey with HireMaster.</h2>
+          <p>
+            Unlock opportunities and connect with clients seamlessly. Whether you’re a freelancer
+            looking for exciting projects or a client searching for top talent, HireMaster provides
+            the platform to make it happen.
+          </p>
+          <p>
+            Sign in to manage your projects, bids, and payments effortlessly.
+          </p>
+
+        </div>
       </div>
     </div>
   );

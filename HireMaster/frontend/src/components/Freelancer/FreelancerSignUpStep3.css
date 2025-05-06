@@ -14,13 +14,17 @@
   }
   
   .signup-right {
-    flex: 1;
-    background: linear-gradient(to bottom right, #4f46e5, #7c3aed);
+    width: 50%;
     color: white;
-    padding: 4rem 2rem;
+    /* background: linear-gradient(to bottom right, #4f46e5, #7c3aed); */
+    background: url(../../assets/Background_Sign_In.jpg) no-repeat  fixed;
+    background-size: cover;
+    background-position: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    font-size: 1rem;
   }
   
   .top-nav {

@@ -123,7 +123,11 @@ export default function FreelancerManageBids() {
     return (
         <div className="dashboard-container">
             <aside className="sidebar">
-                <div className="logo">HM</div>
+                <div className="logo">HM
+                    {/* <div className="SignIn-logo">
+                        <img src={assets.Logo_3} alt="Logo" />
+                    </div> */}
+                </div>
                 <nav className="sidebar-menu">
                     <Link to="/freelancer-dashboard" className="menu-item">Dashboard</Link>
                     <Link to="/freelancer-projects" className="menu-item">Projects</Link>

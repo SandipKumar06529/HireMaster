@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./ClientSignUpStepTwo.css";
 import { useNavigate } from "react-router-dom";
+import { assets } from "../../../assets/assets";
 
 export default function ClientSignUpStepTwo() {
   const navigate = useNavigate();
@@ -68,7 +69,9 @@ export default function ClientSignUpStepTwo() {
       {/* Left Section */}
       <div className="signup-left">
         <div className="signup-header">
-          <div className="logo">HM</div>
+          <div className="SignIn-logo">
+            <img src={assets.Logo_3} alt="Logo" />
+          </div>
           <div className="login-link">
             <span>Already a Client?</span>
             <button className="btn-outline" onClick={() => navigate("/")}>Log In</button>

@@ -5,7 +5,7 @@
   }
   
   .signup-left {
-    width: 60%;
+    width: 50%;
     padding: 2rem 4rem;
     display: flex;
     flex-direction: column;
@@ -42,10 +42,18 @@
   }
   
   .form-wrapper {
-    max-width: 800px;
-    margin: 0 0;
+    max-width: 600px;
+    display: block;
+    flex-direction: column;
+    padding: 2rem 4rem;
+    margin: auto;
+    margin-top: 8rem;
+    border-radius: 2rem;
+    border: #c2c8d6 1px  solid;
+    box-shadow: 0 5px 7px rgba(39, 20, 206, 0.05);
   }
   
+
   .signup-form {
     margin-top: 1.5rem;
     display: flex;
@@ -127,13 +135,16 @@
   }
   
   .signup-right {
-    width: 40%;
-    background: linear-gradient(to bottom right, #4f46e5, #7c3aed);
+    width: 50%;
     color: white;
-    padding: 4rem 2rem;
+    /* background: linear-gradient(to bottom right, #4f46e5, #7c3aed); */
+    background: url(../../../assets/Background_Sign_In.jpg) no-repeat  fixed;
+    background-size: cover;
+    background-position: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
   }
   
   .signup-right h2 {

@@ -13,11 +13,11 @@
     background-color: #fff;
   }
   
-  .signup-header {
+  /* .signup-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
+  } */
   
   .logo {
     font-weight: bold;
@@ -34,17 +34,21 @@
   
   .btn-outline {
     border: 1px solid #4f46e5;
-    background: transparent;
-    color: #4f46e5;
+    background: #4f46e5;
+    color: white;
     padding: 0.4rem 1rem;
     border-radius: 0.3rem;
     cursor: pointer;
   }
+
+  .btn-outline:hover {
+    background: #4338ca;
+  }
   
-  .form-wrapper {
+  /* .form-wrapper {
     max-width: 600px;
     margin: auto 0;
-  }
+  } */
   
   .signup-form {
     margin-top: 1.5rem;
