@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignInPage.css";
+import { assets } from "../../assets/assets";
 
 export default function SignInPage() {
   const navigate = useNavigate();
@@ -97,7 +98,9 @@ export default function SignInPage() {
     <div className="signin-container">
       <div className="signin-left">
         <div className="signup-header">
-          <div className="logo">HM</div>
+          <div className="logo">
+            <img src={assets.Logo_3} alt="Logo"/>
+          </div>
         </div>
 
         <div className="form-wrapper">
