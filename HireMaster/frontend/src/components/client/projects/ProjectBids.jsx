@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./ProjectBids.css";
+import { assets } from "../../../assets/assets";
 
 export default function ProjectBids() {
   const navigate = useNavigate();
@@ -107,7 +108,9 @@ export default function ProjectBids() {
   return (
     <div className="dashboard-container">
       <aside className="sidebar">
-        <div className="logo">HM</div>
+        <div className="SignIn-logo">
+          <img src={assets.Logo_3} alt="Logo" />
+        </div>
         <nav className="sidebar-menu">
           <Link to="/dashboard" className="menu-item">Dashboard</Link>
           <Link to="/projects" className="menu-item active">Projects</Link>
@@ -135,12 +138,12 @@ export default function ProjectBids() {
                 <div className="bid-card" key={bid.id}>
                   <h4>{firstName} {lastName}</h4>
                   <div className="bid-meta">
-                    <span className="amount">Bid: ${bid.bid_amount}</span>
+                    <span className="amount">💰Bid: ${bid.bid_amount}</span>
                     <span className={`status ${bid.bid_status.toLowerCase()}`}>
                       {bid.bid_status}
                     </span>
                   </div>
-                  <p className="proposal">{bid.proposal}</p>
+                  <p className="proposal"><ion-icon name="document-outline" width="1px"></ion-icon>Proposal: {bid.proposal}</p>
                   {bid.bid_status === "Pending" && !hasAccepted && (
                     <div className="bid-actions">
                       <button
@@ -164,6 +167,9 @@ export default function ProjectBids() {
 
           <button className="btn-back" onClick={() => navigate(`/projects/${projectId}`)}>Back to Project</button>
         </section>
+        <footer className="footer-text">
+          <span><img src={assets.Logo_3} alt="Logo" width='15px' /></span> © 2025 All Rights Reserved to HireMaster | Version 0.1
+        </footer>
       </main>
     </div>
   );

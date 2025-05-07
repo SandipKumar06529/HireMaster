@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./PostProjects.css";
+import { assets } from "../../../assets/assets";
 
 export default function PostProject() {
   const navigate = useNavigate();
@@ -71,7 +72,9 @@ export default function PostProject() {
   return (
     <div className="dashboard-container">
       <aside className="sidebar">
-        <div className="logo">HM</div>
+        <div className="SignIn-logo">
+          <img src={assets.Logo_3} alt="Logo" />
+        </div>
         <nav className="sidebar-menu">
           <Link to="/dashboard" className="menu-item">Dashboard</Link>
           <Link to="/projects" className="menu-item active">Projects</Link>
@@ -104,11 +107,6 @@ export default function PostProject() {
             </label>
 
             <label>
-              Budget:
-              <input type="number" name="budget" value={form.budget} onChange={handleChange} required />
-            </label>
-
-            <label>
               Required Skills:
               <textarea name="requiredSkills" rows="2" value={form.requiredSkills} onChange={handleChange} required />
             </label>
@@ -116,6 +114,11 @@ export default function PostProject() {
             <label>
               Preferred Skills:
               <textarea name="preferredSkills" rows="2" value={form.preferredSkills} onChange={handleChange} required />
+            </label>
+
+            <label>
+              Budget:
+              <input type="number" name="budget" value={form.budget} onChange={handleChange} required />
             </label>
 
             <label>
@@ -129,6 +132,9 @@ export default function PostProject() {
             </div>
           </form>
         </section>
+        <footer className="footer-text">
+          <span><img src={assets.Logo_3} alt="Logo" width='15px' /></span> © 2025 All Rights Reserved to HireMaster | Version 0.1
+        </footer>
       </main>
     </div>
   );

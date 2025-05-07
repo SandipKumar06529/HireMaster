@@ -48,7 +48,9 @@ export default function ProjectDetails() {
   return (
     <div className="dashboard-container">
       <aside className="sidebar">
-        <div className="logo">HM</div>
+        <div className="SignIn-logo">
+          <img src={assets.Logo_3} alt="Logo" />
+        </div>
         <nav className="sidebar-menu">
           <Link to="/dashboard" className="menu-item">Dashboard</Link>
           <Link to="/projects" className="menu-item active">Projects</Link>
@@ -73,6 +75,7 @@ export default function ProjectDetails() {
               <span>🕒 Deadline: {project.deadline ? new Date(project.deadline).toLocaleDateString() : "N/A"}</span>
 
             </div>
+            <h5>Description:</h5>
             <p>
               {project.description}
             </p>
@@ -94,10 +97,10 @@ export default function ProjectDetails() {
 
             <h5>Why Join Us?</h5>
             <ul>
-              <li>Work on an exciting FinTech project.</li>
-              <li>Competitive salary and benefits.</li>
-              <li>Opportunity to work with cutting-edge technologies.</li>
-              <li>Flexible remote work options.</li>
+              <li id="list">Work on an exciting FinTech project.</li>
+              <li id="list">Competitive salary and benefits.</li>
+              <li id="list">Opportunity to work with cutting-edge technologies.</li>
+              <li id="list">Flexible remote work options.</li>
             </ul>
 
             <div className="details-buttons">

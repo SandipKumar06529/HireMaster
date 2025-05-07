@@ -92,7 +92,9 @@ export default function ClientProjects() {
   return (
     <div className="dashboard-container">
       <aside className="sidebar">
-        <div className="logo">HM</div>
+        <div className="SignIn-logo">
+          <img src={assets.Logo_3} alt="Logo" />
+        </div>
         <nav className="sidebar-menu">
           <Link to="/dashboard" className="menu-item">Dashboard</Link>
           <Link to="/projects" className="menu-item active">Projects</Link>

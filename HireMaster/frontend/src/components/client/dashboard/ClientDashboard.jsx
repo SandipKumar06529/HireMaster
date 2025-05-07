@@ -7,9 +7,31 @@ export default function ClientDashboard() {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [readNotifications, setReadNotifications] = useState([]);
+  const notificationRef = useRef(null);
+
+  const notifications = [
+    { text: "Your bid on 'Stock Market Tracking App' has been accepted! 🎉", type: "accepted" },
+    { text: "You have a new project invitation: 'Mobile Fitness App'. 📩", type: "invitation" },
+    { text: "Reminder: Update your profile to attract more clients.", type: "general" }
+  ];
 
   const [clientStats, setClientStats] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+    if (!showNotifications) {
+      setTimeout(() => setShowNotifications(false), 5000);
+    }
+  };
+
+  const markAsRead = (index) => {
+    if (!readNotifications.includes(index)) {
+      setReadNotifications([...readNotifications, index]);
+    }
+  };
 
   const toggleMenu = () => setShowMenu(!showMenu);
 
@@ -94,7 +116,25 @@ export default function ClientDashboard() {
         <header className="dashboard-header">
           <h2>Dashboard</h2>
           <div className="header-actions">
-            <span className="notification">🔔<sup>2</sup></span>
+            {/* Notification */}
+            <div className="notification-wrapper" ref={notificationRef}>
+              <span className="notification" onClick={toggleNotifications}>
+                🔔<sup>{notifications.length - readNotifications.length}</sup>
+              </span>
+              {showNotifications && (
+                <div className="notifications-popup">
+                  {notifications.map((note, idx) => (
+                    <div
+                      key={idx}
+                      className={`notification-item ${readNotifications.includes(idx) ? 'read' : ''}`}
+                      onClick={() => markAsRead(idx)}
+                    >
+                      {note.text}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             <div className="profile-wrapper" ref={menuRef}>
               <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
               {showMenu && (
@@ -174,7 +214,7 @@ export default function ClientDashboard() {
           </table>
         </section>
         <footer className="footer-text">
-          <span><img src={assets.Logo_3} alt="Logo" width='15px'/></span> © 2025 All Rights Reserved to HireMaster | Version 0.1
+          <span><img src={assets.Logo_3} alt="Logo" width='15px' /></span> © 2025 All Rights Reserved to HireMaster | Version 0.1
         </footer>
       </main>
     </div>

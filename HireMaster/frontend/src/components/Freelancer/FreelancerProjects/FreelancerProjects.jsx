@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./FreelancerProjects.css";
+import { assets } from "../../../assets/assets"; 
 
 export default function FreelancerProjects() {
   const navigate = useNavigate();
@@ -109,7 +110,9 @@ export default function FreelancerProjects() {
   return (
     <div className="dashboard-container">
       <aside className="sidebar">
-        <div className="logo">HM</div>
+        <div className="SignIn-logo">
+          <img src={assets.Logo_3} alt="Logo" />
+        </div>
         <nav className="sidebar-menu">
           <Link to="/freelancer-dashboard" className="menu-item">Dashboard</Link>
           <Link to="/freelancer-projects" className="menu-item active">Projects</Link>
@@ -145,7 +148,7 @@ export default function FreelancerProjects() {
                 <div className="project-title-wrapper">
                   <h2 className="project-title">{project.title}</h2>
                   {bidProjectIds.includes(project.id) && (
-                    <span className="already-bid-label">✅ Already Bid</span>
+                    <span className="already-bid-label">✅ Already Bidded</span>
                   )}
                 </div>
                 <p className="project-meta">

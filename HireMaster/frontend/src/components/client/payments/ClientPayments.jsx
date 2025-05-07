@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./ClientPayments.css";
+import { assets } from "../../../assets/assets";
+import RateFreelancerModal from "../Rating/RateFreelancerModal";
 
 export default function ClientPayments() {
   const [payments, setPayments] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedFreelancer, setSelectedFreelancer] = useState("");
+  const [toast, setToast] = useState(""); // 🆕 for toast message
 
   const clientId = localStorage.getItem("clientId");
 
@@ -89,11 +94,24 @@ export default function ClientPayments() {
       console.error("Payment update failed:", error);
     }
   };
+  const openRatingModal = (freelancerName) => {
+    setSelectedFreelancer(freelancerName);
+    setShowModal(true);
+  };
+
+  const handleSubmitReview = (data) => {
+    console.log("Review submitted:", data);
+    // TODO: Send to backend with freelancer/project context
+    setToast(`Thanks! You rated ${selectedFreelancer} with ${data.rating} ★`);
+    setTimeout(() => setToast(""), 4000); // hide toast after 4 seconds
+  };
 
   return (
     <div className="dashboard-container">
       <aside className="sidebar">
-        <div className="logo">HM</div>
+        <div className="SignIn-logo">
+          <img src={assets.Logo_3} alt="Logo" />
+        </div>
         <nav className="sidebar-menu">
           <Link to="/dashboard" className="menu-item">Dashboard</Link>
           <Link to="/projects" className="menu-item">Projects</Link>
@@ -113,12 +131,14 @@ export default function ClientPayments() {
           <table className="payments-table">
             <thead>
               <tr>
+                <th>PDF</th>
                 <th>Invoice Number</th>
                 <th>Freelancer</th>
                 <th>Payment Date</th>
                 <th>Status</th>
                 <th>Amount</th>
                 <th>Pay</th>
+                <th>Rate</th>
               </tr>
             </thead>
             <tbody>
@@ -136,6 +156,7 @@ export default function ClientPayments() {
 
                   return (
                     <tr key={payment._id || index}>
+                      <td><input type="checkbox" id="checkbox" /></td>
                       <td>{payment.invoice_number}</td>
                       <td>
                         {payment.freelancer_id?.user_id?.first_name}{" "}
@@ -157,6 +178,18 @@ export default function ClientPayments() {
                           {isPaid ? "Paid" : "Pay"}
                         </button>
                       </td>
+                      <td>
+                        <button
+                          className="btn-rate"
+                          onClick={() =>
+                            openRatingModal(
+                              `${payment.freelancer_id?.user_id?.first_name} ${payment.freelancer_id?.user_id?.last_name}`
+                            )
+                          }
+                        >
+                          Rate
+                        </button>
+                      </td>
                     </tr>
                   );
                 })
@@ -164,6 +197,17 @@ export default function ClientPayments() {
             </tbody>
           </table>
         </section>
+        <footer className="footer-text">
+          <span><img src={assets.Logo_3} alt="Logo" width='15px' /></span> © 2025 All Rights Reserved to HireMaster | Version 0.1
+        </footer>
+        {showModal && (
+          <RateFreelancerModal
+            freelancerName={selectedFreelancer}
+            onClose={() => setShowModal(false)}
+            onSubmit={handleSubmitReview}
+          />
+        )}
+        {toast && <div className="toast">{toast}</div>} {/* 🆕 Toast element */}
       </main>
     </div>
   );

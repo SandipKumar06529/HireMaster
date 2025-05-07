@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import "./FreelancerProjectDetails.css";
 import BidModal from "../FreelancerMangeBids/BidModal";
+import { assets } from "../../../assets/assets";
 
 export default function FreelancerProjectDetails() {
   const { projectId } = useParams();
@@ -90,7 +91,9 @@ export default function FreelancerProjectDetails() {
   return (
     <div className="dashboard-container">
       <aside className="sidebar">
-        <div className="logo">HM</div>
+        <div className="SignIn-logo">
+          <img src={assets.Logo_3} alt="Logo" />
+        </div>
         <nav className="sidebar-menu">
           <Link to="/freelancer-dashboard" className="menu-item">Dashboard</Link>
           <Link to="/freelancer-projects" className="menu-item active">Projects</Link>

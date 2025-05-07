@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./FreelancerManageBids.css";
+import { assets } from "../../../assets/assets";
 
 export default function FreelancerManageBids() {
     const [expandedIndex, setExpandedIndex] = useState(null);
@@ -123,10 +124,8 @@ export default function FreelancerManageBids() {
     return (
         <div className="dashboard-container">
             <aside className="sidebar">
-                <div className="logo">HM
-                    {/* <div className="SignIn-logo">
-                        <img src={assets.Logo_3} alt="Logo" />
-                    </div> */}
+                <div className="SignIn-logo">
+                    <img src={assets.Logo_3} alt="Logo" />
                 </div>
                 <nav className="sidebar-menu">
                     <Link to="/freelancer-dashboard" className="menu-item">Dashboard</Link>
