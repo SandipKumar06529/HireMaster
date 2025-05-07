@@ -198,6 +198,43 @@ type ClientProject {
   status: String!
 }
 
+type Notification {
+  id: ID!
+  user_id: ID!
+  reference_type: String!
+  reference_id: ID!
+  notification_message: String!
+  notification_type: String!
+  notification_date: String!
+  is_action_required: Boolean!
+}
+  input RatingInput {
+  project_id: ID!
+  client_id: ID!
+  freelancer_id: ID!
+  feedback: String!
+  rating: Int!
+  skill_endorsement: [String]
+}
+  type RatingStats {
+  averageRating: Float!
+  totalReviews: Int!
+}
+
+type Rating {
+  id: ID!
+  project_id: ID!
+  freelancer_id: ID!
+  client_id: ID!
+  rating: Int!
+  feedback: String!
+  skill_endorsement: [String]
+  rating_date: String
+}
+
+
+
+
   type Mutation {
     createUser(userInput: UserInput): AuthData!
     createClient(clientInput: ClientInput): Client!
@@ -212,6 +249,16 @@ type ClientProject {
     acceptBid(bidId: ID!, projectId: ID!): Boolean!
     createPayment(projectId: ID!, clientId: ID!, freelancerId: ID!, amount: Float!): Payment
     markPaymentAsPaid(paymentId: ID!): Payment
+    createNotification(
+      user_id: ID!
+      reference_type: String!
+      reference_id: ID!
+      notification_message: String!
+      notification_type: String!
+      is_action_required: Boolean
+  ): Notification!
+    markNotificationAsRead(notificationId: ID!): Boolean!
+    submitRating(input: RatingInput!): Rating
 
   }
 
@@ -229,7 +276,8 @@ type ClientProject {
     getFreelancerPayments(freelancerId: ID!): [Payment]
     getFreelancerDashboardStats(freelancerId: ID!): FreelancerDashboardStats!
     getClientDashboardStats(clientId: ID!): ClientDashboardStats!
-
+    getNotifications(userId: ID!): [Notification!]!
+    getFreelancerRatingStats(freelancerId: ID!): RatingStats!
   }
 `);
 

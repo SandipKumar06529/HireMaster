@@ -8,15 +8,9 @@ export default function ClientDashboard() {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   const [readNotifications, setReadNotifications] = useState([]);
   const notificationRef = useRef(null);
-
-  const notifications = [
-    { text: "Your bid on 'Stock Market Tracking App' has been accepted! 🎉", type: "accepted" },
-    { text: "You have a new project invitation: 'Mobile Fitness App'. 📩", type: "invitation" },
-    { text: "Reminder: Update your profile to attract more clients.", type: "general" }
-  ];
-
   const [clientStats, setClientStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -27,9 +21,26 @@ export default function ClientDashboard() {
     }
   };
 
-  const markAsRead = (index) => {
-    if (!readNotifications.includes(index)) {
-      setReadNotifications([...readNotifications, index]);
+  const markAsRead = async (id) => {
+    if (!readNotifications.includes(id)) {
+      setReadNotifications((prev) => [...prev, id]);
+
+      try {
+        await fetch("http://localhost:4000/graphql", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            query: `
+              mutation MarkNotification($notificationId: ID!) {
+                markNotificationAsRead(notificationId: $notificationId)
+              }
+            `,
+            variables: { notificationId: id }
+          })
+        });
+      } catch (error) {
+        console.error("Failed to mark notification as read:", error);
+      }
     }
   };
 
@@ -52,50 +63,71 @@ export default function ClientDashboard() {
   }, []);
 
   useEffect(() => {
-    const fetchDashboardStats = async () => {
-      const clientId = localStorage.getItem("clientId");
-      if (!clientId) return;
+    const clientId = localStorage.getItem("clientId");
+    if (!clientId) return;
 
-      const query = `
-        query GetClientStats($clientId: ID!) {
-          getClientDashboardStats(clientId: $clientId) {
-            clientName
-            totalProjectsPosted
-            totalBidsReceived
-            totalActiveProjects
-            totalPaymentsMade
-            projects {
-              title
-              freelancerName
-              bidAmount
-              status
-            }
+    const query = `
+      query GetClientStats($clientId: ID!) {
+        getClientDashboardStats(clientId: $clientId) {
+          clientName
+          totalProjectsPosted
+          totalBidsReceived
+          totalActiveProjects
+          totalPaymentsMade
+          projects {
+            title
+            freelancerName
+            bidAmount
+            status
           }
         }
-      `;
+      }
+    `;
 
-      try {
-        const response = await fetch("http://localhost:4000/graphql", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            query,
-            variables: { clientId },
-          }),
-        });
-
-        const result = await response.json();
-        setClientStats(result.data.getClientDashboardStats);
+    fetch("http://localhost:4000/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query, variables: { clientId } })
+    })
+      .then(res => res.json())
+      .then(data => {
+        setClientStats(data.data.getClientDashboardStats);
         setLoading(false);
-      } catch (error) {
+      })
+      .catch(error => {
         console.error("Error fetching dashboard stats:", error);
         setLoading(false);
-      }
-    };
+      });
+  }, []);
 
-    fetchDashboardStats();
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) return;
+
+    const query = `
+      query GetNotifications($userId: ID!) {
+        getNotifications(userId: $userId) {
+          id
+          notification_message
+          notification_type
+          is_action_required
+          notification_date
+        }
+      }
+    `;
+
+    fetch("http://localhost:4000/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query, variables: { userId } })
+    })
+      .then(res => res.json())
+      .then(data => {
+        setNotifications(data.data.getNotifications);
+      })
+      .catch(error => {
+        console.error("Failed to fetch notifications:", error);
+      });
   }, []);
 
   return (
@@ -116,20 +148,22 @@ export default function ClientDashboard() {
         <header className="dashboard-header">
           <h2>Dashboard</h2>
           <div className="header-actions">
-            {/* Notification */}
             <div className="notification-wrapper" ref={notificationRef}>
               <span className="notification" onClick={toggleNotifications}>
                 🔔<sup>{notifications.length - readNotifications.length}</sup>
               </span>
               {showNotifications && (
                 <div className="notifications-popup">
-                  {notifications.map((note, idx) => (
+                  {notifications.map((note) => (
                     <div
-                      key={idx}
-                      className={`notification-item ${readNotifications.includes(idx) ? 'read' : ''}`}
-                      onClick={() => markAsRead(idx)}
+                      key={note.id}
+                      className={`notification-item ${note.notification_type} ${readNotifications.includes(note.id) ? 'read' : 'unread'}`}
+                      onClick={() => markAsRead(note.id)}
                     >
-                      {note.text}
+                      {note.notification_message}
+                      <div className="notification-date">
+                        {new Date(parseInt(note.notification_date)).toLocaleString()}
+                      </div>
                     </div>
                   ))}
                 </div>

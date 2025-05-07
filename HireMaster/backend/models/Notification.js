@@ -9,6 +9,7 @@ const notificationSchema = new mongoose.Schema(
           notification_message: { type: String, required: true, trim: true },
           notification_type: { type: String, enum: ['info', 'warning', 'error'], required: true },
           notification_date: { type: Date, default: Date.now },
+          notification_status: { type: String, enum: ['unread', 'read', 'dismissed'], default: 'unread' },
           is_action_required: { type: Boolean, default: false },
         }, 
     

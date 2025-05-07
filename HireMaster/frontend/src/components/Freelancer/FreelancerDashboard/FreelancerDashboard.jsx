@@ -6,18 +6,15 @@ import { assets } from "../../../assets/assets";
 export default function FreelancerDashboard() {
   const [dashboardStats, setDashboardStats] = useState(null);
   const freelancerId = localStorage.getItem("freelancerId");
+  const userId = localStorage.getItem("userId");
 
-  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   const [readNotifications, setReadNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
   const notificationRef = useRef(null);
   const menuRef = useRef(null);
+  const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
-
-  const notifications = [
-    { text: "Your bid on 'Stock Market Tracking App' has been accepted! 🎉", type: "accepted" },
-    { text: "You have a new project invitation: 'Mobile Fitness App'. 📩", type: "invitation" },
-    { text: "Reminder: Update your profile to attract more clients.", type: "general" }
-  ];
 
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
@@ -27,16 +24,32 @@ export default function FreelancerDashboard() {
   };
 
   const toggleMenu = () => setShowMenu(!showMenu);
-  const [showMenu, setShowMenu] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
   };
 
-  const markAsRead = (index) => {
-    if (!readNotifications.includes(index)) {
-      setReadNotifications([...readNotifications, index]);
+  const markAsRead = async (id) => {
+    if (!readNotifications.includes(id)) {
+      setReadNotifications((prev) => [...prev, id]);
+
+      try {
+        await fetch("http://localhost:4000/graphql", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            query: `
+              mutation MarkNotification($notificationId: ID!) {
+                markNotificationAsRead(notificationId: $notificationId)
+              }
+            `,
+            variables: { notificationId: id }
+          })
+        });
+      } catch (error) {
+        console.error("Failed to mark notification as read:", error);
+      }
     }
   };
 
@@ -53,7 +66,7 @@ export default function FreelancerDashboard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ✅ Fetch freelancer dashboard stats
+  // Fetch dashboard stats
   useEffect(() => {
     if (!freelancerId) return;
 
@@ -88,6 +101,35 @@ export default function FreelancerDashboard() {
     fetchStats();
   }, [freelancerId]);
 
+  // Fetch notifications
+  useEffect(() => {
+    if (!userId) return;
+
+    const query = `
+      query GetNotifications($userId: ID!) {
+        getNotifications(userId: $userId) {
+          id
+          notification_message
+          notification_type
+          is_action_required
+          notification_date
+        }
+      }
+    `;
+
+    fetch("http://localhost:4000/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query, variables: { userId } })
+    })
+      .then(res => res.json())
+      .then(data => {
+        setNotifications(data.data.getNotifications);
+      })
+      .catch(error => {
+        console.error("Failed to fetch notifications:", error);
+      });
+  }, [userId]);
 
   return (
     <div className="dashboard-container">
@@ -108,20 +150,19 @@ export default function FreelancerDashboard() {
         <header className="dashboard-header">
           <h2>Dashboard</h2>
           <div className="header-actions">
-            {/* Notification */}
             <div className="notification-wrapper" ref={notificationRef}>
               <span className="notification" onClick={toggleNotifications}>
                 🔔<sup>{notifications.length - readNotifications.length}</sup>
               </span>
               {showNotifications && (
                 <div className="notifications-popup">
-                  {notifications.map((note, idx) => (
+                  {notifications.map((note) => (
                     <div
-                      key={idx}
-                      className={`notification-item ${readNotifications.includes(idx) ? 'read' : ''}`}
-                      onClick={() => markAsRead(idx)}
+                      key={note.id}
+                      className={`notification-item ${readNotifications.includes(note.id) ? 'read' : 'unread'}`}
+                      onClick={() => markAsRead(note.id)}
                     >
-                      {note.text}
+                      {note.notification_message}
                     </div>
                   ))}
                 </div>
@@ -131,7 +172,7 @@ export default function FreelancerDashboard() {
               <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
               {showMenu && (
                 <div className="dropdown-menu">
-                  <button onClick={() => navigate("/profile")}>My Profile</button>
+                  <button onClick={() => navigate("/freelancer-profile")}>My Profile</button>
                   <button onClick={handleLogout}>Log Out</button>
                 </div>
               )}
@@ -139,13 +180,8 @@ export default function FreelancerDashboard() {
           </div>
         </header>
 
-        {/* <section className="welcome-section">
-          <h1>Welcome To Hire Master</h1>
-          <h2>Amy Wong</h2>
-        </section> */}
         <section className="welcome-section">
           <img src={assets.Background_dashboard} alt="background" className="background-img" />
-
           <div className="welcome-content">
             <div className="text-content">
               <h1>Welcome To HireMaster</h1>
@@ -174,15 +210,9 @@ export default function FreelancerDashboard() {
           </div>
         </section>
 
-
         <section className="projects-section">
           <div className="projects-header">
             <h3>My Projects</h3>
-            {/* <div className="filters">
-              <button>Monthly</button>
-              <button>Weekly</button>
-              <button className="active">Today</button>
-            </div> */}
           </div>
 
           <table className="projects-table">
@@ -214,6 +244,7 @@ export default function FreelancerDashboard() {
             </tbody>
           </table>
         </section>
+
         <footer className="footer-text">
           <span><img src={assets.Logo_3} alt="Logo" width='15px' /></span> © 2025 All Rights Reserved to HireMaster | Version 0.1
         </footer>

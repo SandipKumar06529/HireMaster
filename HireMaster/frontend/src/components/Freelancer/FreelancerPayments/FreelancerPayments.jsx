@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./FreelancerPayments.css";
 import { assets } from "../../../assets/assets";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
 
 export default function FreelancerPayments() {
   const [payments, setPayments] = useState([]);
@@ -11,6 +14,16 @@ export default function FreelancerPayments() {
 
   const toggleMenu = () => setShowMenu(!showMenu);
   const [showMenu, setShowMenu] = useState(false);
+  const [selectedPayments, setSelectedPayments] = useState([]);
+
+  const handleCheckboxChange = (paymentId) => {
+    setSelectedPayments((prev) =>
+      prev.includes(paymentId)
+        ? prev.filter((id) => id !== paymentId)
+        : [...prev, paymentId]
+    );
+  };
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -96,6 +109,30 @@ export default function FreelancerPayments() {
       );
     }
   };
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Freelancer Payment Report", 14, 15);
+
+    const filtered = payments.filter((p) => selectedPayments.includes(p._id));
+
+    const tableData = filtered.map((p) => [
+      p.invoice_number,
+      `${p.client_id?.user_id?.first_name || ""} ${p.client_id?.user_id?.last_name || ""}`,
+      p.payment_status.toUpperCase(),
+      p.amount,
+      p.payment_date_completed
+        ? new Date(Number(p.payment_date_completed)).toLocaleDateString("en-US")
+        : "-"
+    ]);
+
+    doc.autoTable({
+      head: [["Invoice #", "Client", "Status", "Amount", "Date"]],
+      body: tableData,
+      startY: 25
+    });
+
+    doc.save("freelancer_payments.pdf");
+  };
 
   return (
     <div className="dashboard-container">
@@ -117,7 +154,10 @@ export default function FreelancerPayments() {
           <header className="top-navbar">
             <h2>Payments</h2>
             <div className="header-actions">
-              <button className="btn-download">⬇️ Download PDF Report</button>
+              <button className="btn-download" onClick={handleDownloadPDF}>
+                ⬇️ Download PDF Report
+              </button>
+
               <div className="profile-wrapper" ref={menuRef}>
                 <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
                 {showMenu && (
@@ -166,7 +206,12 @@ export default function FreelancerPayments() {
 
                   return (
                     <tr key={payment._id || index}>
-                      <td><input type="checkbox" id="checkbox" /></td>
+                      <td><input
+                        type="checkbox"
+                        checked={selectedPayments.includes(payment._id)}
+                        onChange={() => handleCheckboxChange(payment._id)}
+                      />
+                      </td>
                       <td>{payment.invoice_number}</td>
                       <td>{clientName}</td>
                       <td>{paymentDate}</td>
