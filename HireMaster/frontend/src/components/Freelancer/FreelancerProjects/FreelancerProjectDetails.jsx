@@ -148,7 +148,11 @@ export default function FreelancerProjectDetails() {
             <button className="btn-cancel" onClick={() => navigate("/freelancer-projects")}>Cancel</button>
           </div>
         </div>
+        <footer className="footer-text">
+          <span><img src={assets.Logo_3} alt="Logo" width='15px' /></span> © 2025 All Rights Reserved to HireMaster | Version 0.1
+        </footer>
       </main>
+
 
       {/* BidModal with budget & freelancerId passed */}
       {showBidModal && (
@@ -160,6 +164,7 @@ export default function FreelancerProjectDetails() {
           freelancerId={localStorage.getItem("freelancerId")}
         />
       )}
+
     </div>
   );
 }

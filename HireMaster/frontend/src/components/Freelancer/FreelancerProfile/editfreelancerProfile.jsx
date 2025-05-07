@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./FreelancerProfile.css";
+import { assets } from "../../../assets/assets"; // adjust path if needed
 
 export default function EditFreelancerProfile() {
   const navigate = useNavigate();
@@ -164,7 +165,9 @@ export default function EditFreelancerProfile() {
   return (
     <div className="dashboard-container">
       <aside className="sidebar">
-        <div className="logo">HM</div>
+        <div className="SignIn-logo">
+          <img src={assets.Logo_3} alt="Logo" />
+        </div>
         <nav className="sidebar-menu">
           <Link to="/freelancer-dashboard" className="menu-item">Dashboard</Link>
           <Link to="/freelancer-projects" className="menu-item">Projects</Link>
@@ -295,7 +298,7 @@ export default function EditFreelancerProfile() {
           </div>
         </form>
         <footer className="footer-text">
-          <span>HM</span> © 2025 All Rights Reserved to HireMaster | Version 0.1
+          <span><img src={assets.Logo_3} alt="Logo" width='15px' /></span> © 2025 All Rights Reserved to HireMaster | Version 0.1
         </footer>
       </main>
     </div>

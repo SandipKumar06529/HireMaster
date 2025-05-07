@@ -117,7 +117,7 @@ export default function FreelancerPayments() {
           <header className="top-navbar">
             <h2>Payments</h2>
             <div className="header-actions">
-              {/* <span className="notification">🔔<sup>2</sup></span> */}
+              <button className="btn-download">⬇️ Download PDF Report</button>
               <div className="profile-wrapper" ref={menuRef}>
                 <span className="avatar" onClick={toggleMenu}>🧑‍💼</span>
                 {showMenu && (
@@ -193,7 +193,7 @@ export default function FreelancerPayments() {
           </div>
 
           <footer className="footer-text">
-            <span>HM</span> © 2025 All Rights Reserved to HireMaster | Version 0.1
+            <span><img src={assets.Logo_3} alt="Logo" width='15px' /></span> © 2025 All Rights Reserved to HireMaster | Version 0.1
           </footer>
         </div>
       </main>

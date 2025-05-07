@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./FreelancerProjects.css";
-import { assets } from "../../../assets/assets"; 
+import { assets } from "../../../assets/assets";
 
 export default function FreelancerProjects() {
   const navigate = useNavigate();
@@ -180,7 +180,7 @@ export default function FreelancerProjects() {
         </div>
 
         <footer className="footer-text">
-          <span>HM</span> © 2025 All Rights Reserved to HireMaster | Version 0.1
+          <span><img src={assets.Logo_3} alt="Logo" width='15px' /></span> © 2025 All Rights Reserved to HireMaster | Version 0.1
         </footer>
 
         {isDialogOpen && (
