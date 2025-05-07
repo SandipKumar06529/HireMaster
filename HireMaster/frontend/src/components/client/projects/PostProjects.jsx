@@ -123,7 +123,7 @@ export default function PostProject() {
 
             <label>
               Bidding Deadline:
-              <input type="date" name="deadline" value={form.deadline} onChange={handleChange} required />
+              <input type="date" name="deadline" value={form.deadline} onChange={handleChange} required  min={new Date().toISOString().split("T")[0]} />
             </label>
 
             <div className="form-buttons">

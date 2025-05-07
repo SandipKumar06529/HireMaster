@@ -127,7 +127,6 @@ export default function FreelancerProfile() {
               <FreelancerRating rating={4.7} reviews={28} />
             </div>
           </div>
-          <button className="edit-btn" onClick={() => navigate("/freelancer-edit-Profile")}>Edit</button>
         </header>
 
         <form className="profile-form">
@@ -196,6 +195,9 @@ export default function FreelancerProfile() {
               <input type="text" value={freelancerData.github || ""} readOnly />
             </div>
           </div>
+          
+          <button className="edit-btn" onClick={() => navigate("/freelancer-edit-Profile")}>Edit</button>
+
         </form>
         <footer className="footer-text">
           <span><img src={assets.Logo_3} alt="Logo" width='15px' /></span> © 2025 All Rights Reserved to HireMaster | Version 0.1

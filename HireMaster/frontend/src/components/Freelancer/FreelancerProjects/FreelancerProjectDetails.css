@@ -92,6 +92,8 @@
   
   .project-section {
     margin-bottom: 1.5rem;
+    white-space: pre-line;
+    line-height: 1.6;
   }
   
   .project-section h4 {
@@ -105,11 +107,14 @@
     padding-left: 1.5rem;
     list-style-type: disc;
     color: #374151;
+    
+  
   }
   
   .project-section ul li {
     margin-bottom: 0.5rem;
     font-size: 0.95rem;
+    
   }
   
   .project-actions {

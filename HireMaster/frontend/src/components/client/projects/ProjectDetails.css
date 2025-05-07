@@ -105,6 +105,8 @@
     margin-bottom: 1rem;
     color: #374151;
     font-size: 0.95rem;
+    white-space: pre-line;
+    line-height: 1.6;
   }
   #list{
     list-style-type:square;
