@@ -116,6 +116,8 @@
     color: #4b5563;;
     margin-bottom: 1rem;
     margin-top: 0;
+    white-space: pre-line;
+    line-height: 1.6;
   }
   
   .bid-actions {

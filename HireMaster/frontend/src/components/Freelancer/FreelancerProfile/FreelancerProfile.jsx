@@ -146,7 +146,6 @@ export default function FreelancerProfile() {
               />
             </div>
           </div>
-          <button className="edit-btn" onClick={() => navigate("/freelancer-edit-Profile")}>Edit</button>
         </header>
 
         <form className="profile-form">
@@ -215,6 +214,9 @@ export default function FreelancerProfile() {
               <input type="text" value={freelancerData.github || ""} readOnly />
             </div>
           </div>
+          
+          <button className="edit-btn" onClick={() => navigate("/freelancer-edit-Profile")}>Edit</button>
+
         </form>
 
         <footer className="footer-text">

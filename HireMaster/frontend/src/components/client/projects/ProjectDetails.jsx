@@ -95,13 +95,13 @@ export default function ProjectDetails() {
               {project.preferredSkills}
             </ul>
 
-            <h5>Why Join Us?</h5>
+            {/* <h5>Why Join Us?</h5>
             <ul>
               <li id="list">Work on an exciting FinTech project.</li>
               <li id="list">Competitive salary and benefits.</li>
               <li id="list">Opportunity to work with cutting-edge technologies.</li>
               <li id="list">Flexible remote work options.</li>
-            </ul>
+            </ul> */}
 
             <div className="details-buttons">
               <button className="btn-bid" onClick={() => navigate(`/projects/${projectId}/bids`)} >Bids</button>

@@ -1,116 +1,118 @@
 .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-    backdrop-filter: blur(1px) brightness(0.5);
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .modal-box {
-    background-color: white;
-    width: 500px;
-    padding: 32px;
-    border-radius: 0.75rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    position: relative;
-  }
-  
-  .modal-header {
-    display: flex;
-    width: 104%;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .modal-header h2 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #1e3a8a;
-    margin: 0;
-  }
-  
-  .close-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 45px;
-    height: 45px;
-    background: #4f46e5;
-    font-size: 1.5em;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-bottom-left-radius: 20px;
-    cursor: pointer;
-    z-index: 1;
-    
-  }
-  
-  .modal-form label {
-    display: block;
-    text-align: start;
-    margin-bottom: 0.3rem;
-    font-weight: 500;
-    color: #374151;
-  }
-  
-  .modal-form textarea{
-      width: 100%;
-      max-width: 97%;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      padding: 0.75rem;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      overflow: hidden;  
-  }
-  .modal-form input {
-    width: 97%;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-  }
-  
-  .modal-actions {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .modal-actions .cancel-btn {
-    background-color: #ef4444;
-    border: none;
-    padding: 0.5rem 1.25rem;
-    font-size: 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  backdrop-filter: blur(1px) brightness(0.5);
+  transition: all 0.3s ease-in-out;
+}
 
-  .cancel-btn:hover {
-    background-color: #a73737;
-  }
-  
-  .submit-btn {
-    background-color: #4f46e5;
-    color: white;
-    border: none;
-    padding: 0.5rem 1.25rem;
-    font-size: 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .submit-btn:hover {
-    background-color: #4338ca;
-  }
-  
+.modal-box {
+  background-color: white;
+  width: 500px;
+  padding: 32px;
+  border-radius: 0.75rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  width: 104%;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin: 0;
+}
+
+.close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45px;
+  height: 45px;
+  background: #4f46e5;
+  font-size: 1.5em;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: 20px;
+  cursor: pointer;
+  z-index: 1;
+
+}
+
+.modal-form label {
+  display: block;
+  text-align: start;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.modal-form textarea {
+  width: 100%;
+  max-width: 97%;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  overflow: hidden;
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+.modal-form input {
+  width: 97%;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-actions .cancel-btn {
+  background-color: #ef4444;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background-color: #a73737;
+}
+
+.submit-btn {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #4338ca;
+}
